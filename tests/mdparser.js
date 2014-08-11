@@ -18,6 +18,6 @@ test('headlines', function(t) {
 		t.deepEqual(result, expected);
 		t.end();
 	});
-	
-	p.parse(fs.createReadStream('./headlines_01.md'));
+
+	p.parse(fs.createReadStream('./data/headlines_01.md'));
 });
