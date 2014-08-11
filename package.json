@@ -1,0 +1,24 @@
+{
+  "name": "graphextract",
+  "version": "0.1.0",
+  "description": "Extracts graph information from a markdown file.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "markdown",
+    "graph",
+    "dot"
+  ],
+  "author": "Tobias Kiertscher <dev@mastersign.de>",
+  "license": "MIT",
+  "dependencies": {
+    "split": "^0.3.0",
+    "vinyl": "^0.3.2"
+  },
+  "devDependencies": {
+    "streamifier": "^0.1.0",
+    "tap": "^0.4.12"
+  }
+}
