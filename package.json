@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "tap ./tests"
+    "test": "tape ./tests/*.js | tap-spec"
   },
   "keywords": [
     "markdown",
@@ -22,6 +22,6 @@
   },
   "devDependencies": {
     "streamifier": "^0.1.0",
-    "tap": "^0.4.12"
+    "tape": "^2.14.0"
   }
 }
