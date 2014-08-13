@@ -21,6 +21,7 @@
     "vinyl": "^0.3.2"
   },
   "devDependencies": {
+    "glob": "^4.0.5",
     "streamifier": "^0.1.0",
     "tape": "^2.14.0"
   }
