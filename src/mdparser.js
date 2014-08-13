@@ -6,6 +6,36 @@ var headlinePattern = /^(#+)\s+(.*?)\s*$/;
 var headline1Pattern = /^==+\s*$/;
 var headline2Pattern = /^--+\s*$/;
 
+var internalLink1Pattern = /\[([^\]]+)\](?:\[\]|[^\[\(]|$)/g;
+var internalLink2Pattern = /\[([^\]]+)\]\[([^\]]+)\]/g;
+
+var externalLinkPattern = /\[([^\]]+)\]\(([^\)]+)\)/g;
+
+var commentPattern = /<!\-\-(.*?)\-\->/g;
+
+var commentStartPattern = /<!\-\-(.*?)$/;
+var commentEndPattern = /^(.*?)\-\->/;
+
+var match = function(re, text, fn, maxIndex) {
+	var m;
+	var cnt = 0;
+	re.lastIndex = 0;
+	m = re.exec(text);
+	if (re.global) {
+		while(m) {
+			if (maxIndex !== undefined && m.index > maxIndex) { break; }
+			cnt = cnt + 1;
+			fn(m);
+			m = re.exec(text);
+		}
+	} else if (m) {
+		if (maxIndex === undefined || m.index <= maxIndex) {
+			cnt = cnt + 1;
+			fn(m);
+		}
+	}
+	return cnt;
+};
 
 var MdParser = function() { };
 util.inherits(MdParser, EventEmitter);
@@ -19,6 +49,8 @@ MdParser.prototype.parse = function parse(input) {
 	}
 
 	var lastLine = null;
+	var commenStart = null;
+	var inComment = false;
 
 	s.on('end', function() {
 		that.emit('end');
@@ -26,28 +58,59 @@ MdParser.prototype.parse = function parse(input) {
 
 	s.on('data', function(line) {
 		
+		// comments
+
+		match(commentPattern, line, function(m) {
+			that.emit('comment', {
+				text: m[1]
+			});
+		});
+
 		// headline
 
-		var headlineMatch = headlinePattern.exec(line),
-			headline1Match = headline1Pattern.exec(line),
-			headline2Match = headline2Pattern.exec(line);
-
-		if (headlineMatch) {
+		match(headlinePattern, line, function(m) {
 			that.emit('headline', { 
-				level: headlineMatch[1].length,
-				text: headlineMatch[2]
+				level: m[1].length,
+				text: m[2]
 			});
-		} else if (headline1Match && lastLine) {
+		}) ||
+		match(headline1Pattern, line, function(m) {
 			that.emit('headline', {
 				level: 1,
 				text: lastLine
 			});
-		} else if (headline2Match && lastLine) {
+		}) ||
+		match(headline2Pattern, line, function(m) {
 			that.emit('headline', {
 				level: 2,
 				text: lastLine
 			});
-		}
+		});
+
+		// internal links
+
+		match(internalLink1Pattern, line, function(m) {
+			that.emit('internal-link', {
+				text: m[1],
+				target: m[1]
+			});
+		});
+
+		match(internalLink2Pattern, line, function(m) {
+			that.emit('internal-link', {
+				text: m[1],
+				target: m[2]
+			});
+		});
+
+		// external links
+
+		match(externalLinkPattern, line, function(m) {
+			that.emit('link', {
+				text: m[1],
+				target: m[2]
+			});
+		});
 
 		lastLine = line.trim();
 	});
