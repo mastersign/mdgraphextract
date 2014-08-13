@@ -1,4 +1,4 @@
-var test = require('tap').test;
+var test = require('tape').test;
 var fs = require('fs');
 
 var MdParser = require('../src/mdparser');
