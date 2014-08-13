@@ -1,19 +1,25 @@
-var cleanHeadline = function(title) {
-	title = title.replace(/\*\*(.*?)\*\*/, '$1');
-	title = title.replace(/\*(.*?)\*/, '$1');
-	title = title.replace(/__(.*?)__/, '$1');
-	title = title.replace(/_(.*?)_/, '$1');
-	title = title.replace(/`(.*?)`/, '$1');
-	title = title.replace(/\s*\{[^\}]*\}$/, '');
-	// links [...](...), [][...], [...][...]
+var removeFormat = function(title) {
+	title = title.replace(/(\*\*?)(.*?)\1/g, '$2');
+	title = title.replace(/(__?)(.*?)\1/g, '$2');
+	title = title.replace(/`(.*?)`/g, '$1');
+	title = title.replace(/\s*\{[^\}]*\}$/g, '');
+	title = title.replace(/\[([^\]]*)\]\[[^\]]*\]/g, '$1');
+	title = title.replace(/\[([^\]]*)\]\([^\)]*\)/g, '$1');
+	title = title.replace(/\[([^\]]+)\]/g, '$1');
+	title = title.replace(/<([^\s>]+)>/g, '$1');
 	return title;
 };
-module.exports.cleanHeadline = cleanHeadline;
+module.exports.removeFormat = removeFormat;
 
 var anchor = function(title, cache) {
-	title = cleanHeadline(title);
-	title = title.replace(/^\s*\W+\s*/, '');
-	return title.replace(' ', '-');
+	title = removeFormat(title);
+	title = title.replace(/^[\W\d]*/, '');
+	title = title.trim();
+	title = title.replace(/\s/g, '-');
+	title = title.replace(/[^\w_\-\.]/g, '');
+	title = title.toLowerCase();
+	if (title === '') {	title = 'section'; }
+	return title;
 };
 module.exports.anchor = anchor;
 
