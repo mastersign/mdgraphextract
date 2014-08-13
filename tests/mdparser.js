@@ -1,7 +1,7 @@
 var test = require('tap').test;
 var fs = require('fs');
 
-var MdParser = require('../mdparser');
+var MdParser = require('../src/mdparser');
 
 test('headlines', function(t) {
 	var expected = [

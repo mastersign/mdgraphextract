@@ -1,7 +1,7 @@
 var test = require('tap').test;
 var streamifier = require('streamifier');
 
-var lines = require('../lines');
+var lines = require('../src/lines');
 
 test('Lines from null', function(t) {
 	t.equals(lines(null), undefined);
