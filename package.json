@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "glob": "^4.0.5",
+    "gulp": "^3.8.7",
     "streamifier": "^0.1.0",
     "tape": "^2.14.0"
   }
