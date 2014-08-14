@@ -23,7 +23,9 @@
   "devDependencies": {
     "glob": "^4.0.5",
     "gulp": "^3.8.7",
+    "gulp-shell": "^0.2.9",
     "streamifier": "^0.1.0",
+    "tap-spec": "^0.2.0",
     "tape": "^2.14.0"
   }
 }
