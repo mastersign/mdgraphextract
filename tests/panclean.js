@@ -38,6 +38,34 @@ test('panclean: removeFormat()', function(t) {
 	t.end();
 });
 
+test('panclean: getAttributes()', function(t) {
+	t.deepEquals(panclean.getAttributes(
+		'Headline'),
+		{}, 
+		'no attributes');
+	t.deepEquals(panclean.getAttributes(
+		'Headline { }'),
+		{}, 
+		'empty attributes');
+	t.deepEquals(panclean.getAttributes(
+		'Headline { #abc }'),
+		{ id: 'abc' }, 
+		'id only');
+	t.deepEquals(panclean.getAttributes(
+		'Headline {.class1 .class2}'),
+		{ classes: ['class1', 'class2'] }, 
+		'classes');
+	t.deepEquals(panclean.getAttributes(
+		'Headline {key1=value1 key2="value 2"}'),
+		{ key1: 'value1', key2: 'value 2' }, 
+		'key-value-pairs');
+	t.deepEquals(panclean.getAttributes(
+		'Headline { key1=value1 .class1  #abc key2="value 2" .class2 }'),
+		{ id: 'abc', classes: ['class1', 'class2'], key1: 'value1', key2: 'value 2' }, 
+		'mix');
+	t.end();
+});
+
 test('panclean: anchor() remove leading non letters', function(t) {
 	t.equals(panclean.anchor(
 		'  headline'),
@@ -83,5 +111,13 @@ test('panclean: anchor() empty', function(t) {
 		'123 + (20)'),
 		'section',
 		'special chars with white spaces');
+	t.end();
+});
+
+test('panclean: anchor() attribute id', function(t) {
+	t.equals(panclean.anchor(
+		'Headline {#abc} '),
+		'abc',
+		'id in headline attributes');
 	t.end();
 });

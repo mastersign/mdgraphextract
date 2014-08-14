@@ -11,7 +11,39 @@ var removeFormat = function(title) {
 };
 module.exports.removeFormat = removeFormat;
 
+var getAttributes = function(title) {
+	var attribPattern = /\s\{((?:[^\}]|\"[^\"]*\")*)\}\s*$/;
+	var idPattern = /(?:^|\s)#(\w+)/;
+	var classPattern = /(?:^|\s)\.(\w+)/g;
+	var keyValPattern = /(?:^|\s)(\w+)=(?:\"([^\"]*)\"|(\w+))/g;
+	var attribMatch = attribPattern.exec(title);
+	var attribString, idMatch, classMatch, keyValMatch;
+	var result = {}
+	if (attribMatch) {
+		attribString = attribMatch[1];
+		idMatch = idPattern.exec(attribString);
+		if (idMatch) {
+			result.id = idMatch[1];
+		}
+		classMatch = classPattern.exec(attribString);
+		while(classMatch) {
+			if (!result.classes) { result.classes = []; }
+			result.classes.push(classMatch[1]);
+			classMatch = classPattern.exec(attribString);
+		}
+		keyValMatch = keyValPattern.exec(attribString);
+		while(keyValMatch) {
+			result[keyValMatch[1]] = keyValMatch[2] || keyValMatch[3];
+			keyValMatch = keyValPattern.exec(attribString);
+		}
+	}
+	return result;
+};
+module.exports.getAttributes = getAttributes;
+
 var anchor = function(title, cache) {
+	var id = getAttributes(title).id;
+	if (id) return id;
 	title = removeFormat(title);
 	title = title.replace(/^[\W\d]*/, '');
 	title = title.trim();
