@@ -47,6 +47,7 @@ MdParser.prototype.parse = function parse(input) {
 		throw 'Input null or undefined.';
 	}
 
+	var row = 0;
 	var lastLine = null;
 	var inCode = false;
 	var inComment = false;
@@ -56,6 +57,8 @@ MdParser.prototype.parse = function parse(input) {
 	});
 
 	s.on('data', function(line) {
+
+		row = row + 1;
 
 		var comments = [];
 		var lastComment = null;
@@ -82,9 +85,14 @@ MdParser.prototype.parse = function parse(input) {
 				}
 				if (!inCode) {
 					inCode = true;
-					that.emit('startCode', {});
+					that.emit('startCode', {
+						row: row, 
+						column: 1
+					});
 				}
 				that.emit('code', { 
+					row: row,
+					column: 1,
 					text: m[1]
 				});
 				
@@ -93,7 +101,10 @@ MdParser.prototype.parse = function parse(input) {
 				return; 
 			}
 			if (inCode) {
-				that.emit('endCode', {});
+				that.emit('endCode', { 
+					row: row - 1, 
+					column: lastLine.length + 1
+				});
 				inCode = false;
 			}
 		}
@@ -105,15 +116,22 @@ MdParser.prototype.parse = function parse(input) {
 				comments.push(m);
 				if (m[1].length > 0) {
 					that.emit('comment', {
+						row: row,
+						column: m.index + 1,
 						text: m[1],
 						inline: false
 					});
 				}
 				inComment = false;
-				that.emit('endComment', {});
+				that.emit('endComment', { 
+					row: row,
+					column: m.index + m[0].length + 1,
+				});
 			});
 			if (inComment) {
 				that.emit('comment', {
+					row: row,
+					column: 1,
 					text: line,
 					inline: false
 				});
@@ -123,6 +141,8 @@ MdParser.prototype.parse = function parse(input) {
 
 		match(commentPattern, line, function(m) {
 			that.emit('comment', {
+				row: row,
+				column: m.index + 1,
 				text: m[1],
 				inline: true
 			});
@@ -135,10 +155,15 @@ MdParser.prototype.parse = function parse(input) {
 				return;
 			}
 			inComment = true;
-			that.emit('startComment', {});
+			that.emit('startComment', {
+				row: row,
+				column: m.index + 1
+			});
 			comments.push(m);
 			if (m[1].length > 0) {
 				that.emit('comment', {
+					row: row,
+					column: m.index + 1,
 					text: m[1],
 					inline: false
 				});
@@ -150,6 +175,8 @@ MdParser.prototype.parse = function parse(input) {
 		match(headlinePattern, line, function(m) {
 			if (isInComment(m)) return;
 			that.emit('headline', { 
+				row: row, 
+				column: m.index + 1,
 				level: m[1].length,
 				text: m[2]
 			});
@@ -157,6 +184,8 @@ MdParser.prototype.parse = function parse(input) {
 		match(headline1Pattern, line, function(m) {
 			if (isInComment(m)) return;
 			that.emit('headline', {
+				row: row - 1, 
+				column: m.index + 1,
 				level: 1,
 				text: lastLine
 			});
@@ -164,6 +193,8 @@ MdParser.prototype.parse = function parse(input) {
 		match(headline2Pattern, line, function(m) {
 			if (isInComment(m)) return;
 			that.emit('headline', {
+				row: row - 1, 
+				column: m.index + 1,
 				level: 2,
 				text: lastLine
 			});
@@ -173,11 +204,15 @@ MdParser.prototype.parse = function parse(input) {
 			if (isInComment(m)) return;
 			if (m[2]) {
 				that.emit('internal-link', {
+					row: row, 
+					column: m.index > 0 ? m.index + 2 : m.index + 1,
 					text: m[1],
 					target: m[2]
 				});
 			} else {
 				that.emit('internal-link', {
+					row: row, 
+					column: m.index > 0 ? m.index + 2 : m.index + 1,
 					text: m[1],
 					target: m[1]
 				});
@@ -189,6 +224,8 @@ MdParser.prototype.parse = function parse(input) {
 		match(externalLinkPattern, line, function(m) {
 			if (isInComment(m)) return;
 			that.emit('link', {
+				row: row, 
+				column: m.index + 1,
 				text: m[1],
 				url: m[2]
 			});
@@ -197,6 +234,8 @@ MdParser.prototype.parse = function parse(input) {
 		match(urlLinkPattern, line, function(m) {
 			if (isInComment(m)) return;
 			that.emit('link', {
+				row: row, 
+				column: m.index + 1,
 				text: m[1],
 				url: m[1]
 			});
