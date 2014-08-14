@@ -1,6 +1,7 @@
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var lines = require('./lines');
+var panclean = require('./panclean');
 
 var headlinePattern = /^(#+)\s+(.*?)\s*$/;
 var headline1Pattern = /^==+\s*$/;
@@ -51,6 +52,19 @@ MdParser.prototype.parse = function parse(input) {
 	var lastLine = null;
 	var inCode = false;
 	var inComment = false;
+
+	var anchorCache = {};
+
+	var uniqueAnchor = function(anchor) {
+		var cnt = anchorCache[anchor];
+		if (cnt) {
+			anchorCache[anchor] = cnt + 1;
+			return anchor + '_' + cnt;
+		} else {
+			anchorCache[anchor] = 1;
+			return anchor;
+		}
+	}
 
 	s.on('end', function() {
 		that.emit('end');
@@ -178,7 +192,9 @@ MdParser.prototype.parse = function parse(input) {
 				row: row, 
 				column: m.index + 1,
 				level: m[1].length,
-				text: m[2]
+				source: m[2],
+				text: panclean.removeFormat(m[2]),
+				anchor: uniqueAnchor(panclean.anchor(m[2]))
 			});
 		}) ||
 		match(headline1Pattern, line, function(m) {
@@ -187,7 +203,9 @@ MdParser.prototype.parse = function parse(input) {
 				row: row - 1, 
 				column: m.index + 1,
 				level: 1,
-				text: lastLine
+				source: lastLine,
+				text: panclean.removeFormat(lastLine),
+				anchor: uniqueAnchor(panclean.anchor(lastLine))
 			});
 		}) ||
 		match(headline2Pattern, line, function(m) {
@@ -196,7 +214,9 @@ MdParser.prototype.parse = function parse(input) {
 				row: row - 1, 
 				column: m.index + 1,
 				level: 2,
-				text: lastLine
+				source: lastLine,
+				text: panclean.removeFormat(lastLine),
+				anchor: uniqueAnchor(panclean.anchor(lastLine))
 			});
 		});
 
