@@ -82,7 +82,7 @@ MdParser.prototype.parse = function parse(input) {
 				}
 				if (!inCode) {
 					inCode = true;
-					that.emit('code-start', {});
+					that.emit('startCode', {});
 				}
 				that.emit('code', { 
 					text: m[1]
@@ -93,7 +93,7 @@ MdParser.prototype.parse = function parse(input) {
 				return; 
 			}
 			if (inCode) {
-				that.emit('code-end', {});
+				that.emit('endCode', {});
 				inCode = false;
 			}
 		}

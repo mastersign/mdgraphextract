@@ -100,8 +100,8 @@ test('MdParser code', function(t) {
 	var p = new MdParser();
 	var result = [];
 	p.on('code', function(hl) { result.push(hl); });
-	p.on('code-start', function() { result.push('start'); });
-	p.on('code-end', function() { result.push('end'); });
+	p.on('startCode', function() { result.push('start'); });
+	p.on('endCode', function() { result.push('end'); });
 	p.on('end', function() {
 		checkObjectArray(t, result, expected);
 		t.end();
