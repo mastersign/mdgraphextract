@@ -83,19 +83,25 @@ test('MdParser links', function(t) {
 
 test('MdParser code', function(t) {
 	var expected = [
+		'start',
 		{ text: '<code 1>' },
 		{ text: '' },
 		{ text: '// <code 3>' },
 		{ text: '  <code 3.1>' },
 		{ text: '    <code 3.1.1>' },
+		'end',
+		'start',
 		{ text: '<code 4>' },
 		{ text: '# <code 5>' },
-		{ text: '' }
+		{ text: '' },
+		'end'
 	];
 
 	var p = new MdParser();
 	var result = [];
 	p.on('code', function(hl) { result.push(hl); });
+	p.on('code-start', function() { result.push('start'); });
+	p.on('code-end', function() { result.push('end'); });
 	p.on('end', function() {
 		checkObjectArray(t, result, expected);
 		t.end();

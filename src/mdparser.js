@@ -80,7 +80,10 @@ MdParser.prototype.parse = function parse(input) {
 				if (!inCode && m[1].length === 0) {
 					return;
 				}
-				inCode = true;
+				if (!inCode) {
+					inCode = true;
+					that.emit('code-start', {});
+				}
 				that.emit('code', { 
 					text: m[1]
 				});
@@ -89,7 +92,10 @@ MdParser.prototype.parse = function parse(input) {
 				lastLine = line;
 				return; 
 			}
-			inCode = false;
+			if (inCode) {
+				that.emit('code-end', {});
+				inCode = false;
+			}
 		}
 
 		// comments
