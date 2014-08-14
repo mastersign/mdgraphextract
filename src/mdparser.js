@@ -77,6 +77,9 @@ MdParser.prototype.parse = function parse(input) {
 				if (!inCode && lastLine.trim().length > 0) {
 					return;
 				}
+				if (!inCode && m[1].length === 0) {
+					return;
+				}
 				inCode = true;
 				that.emit('code', { 
 					text: m[1]
