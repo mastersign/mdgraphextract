@@ -102,7 +102,6 @@ MdParser.prototype.parse = function parse(input) {
 
 		if (inComment) {
 			match(commentEndPattern, line, function(m) {
-				inComment = false;
 				comments.push(m);
 				if (m[1].length > 0) {
 					that.emit('comment', {
@@ -110,6 +109,8 @@ MdParser.prototype.parse = function parse(input) {
 						inline: false
 					});
 				}
+				inComment = false;
+				that.emit('endComment', {});
 			});
 			if (inComment) {
 				that.emit('comment', {
@@ -134,6 +135,7 @@ MdParser.prototype.parse = function parse(input) {
 				return;
 			}
 			inComment = true;
+			that.emit('startComment', {});
 			comments.push(m);
 			if (m[1].length > 0) {
 				that.emit('comment', {
