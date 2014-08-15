@@ -104,7 +104,7 @@ test('MdParser links', function(t) {
 		{ text: 'hidden', url: 'hidden.txt', row: 8, column: 43 },
 		{ text: 'http://www.example.com', url: 'http://www.example.com', row: 13, column: 1 },
 		{ text: 'link', url: 'link.txt', row: 18, column: 13 },
-		{ text: 'link2.txt', url: 'link2.txt', row: 18, column: 31 }
+		{ text: 'file://link2.txt', url: 'file://link2.txt', row: 18, column: 31 }
 	];
 
 	var p = new MdParser(fs.createReadStream('tests/data/links.md'));

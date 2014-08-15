@@ -15,5 +15,5 @@ End <>.
 
 <!-- <thisisnolink -->
 <!--
-comment --> [link](link.txt), <link2.txt>  <!-- comment
+comment --> [link](link.txt), <file://link2.txt>  <!-- comment
 -->
