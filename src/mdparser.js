@@ -37,18 +37,19 @@ var match = function(re, text, fn) {
 	return cnt;
 };
 
-var MdParser = function(input) {
+var MdParser = function(input, encoding) {
 
 	var that = this;
 
-	var s = lines(input);
+	var s = lines(input, encoding);
 	if (s === undefined) {
-		throw 'Input is null or undefined.';
+		throw 'Invalid input.';
 	}
-	that.inputStream = s;
+	s.setEncoding('utf8');
+	that._inputStream = s;
 
 	that.on('newListener', function() {
-		that.inputStream.resume();
+		that._inputStream.resume();
 	});
 
 	var row = 0;
@@ -271,11 +272,11 @@ var MdParser = function(input) {
 util.inherits(MdParser, EventEmitter);
 
 MdParser.prototype.pause = function() {
-	this.inputStream.pause;
+	this._inputStream.pause();
 };
 
 MdParser.prototype.resume = function() {
-	process.nextTick(this.inputStream.resume);
+	this._inputStream.resume();
 };
 
 module.exports = MdParser;
