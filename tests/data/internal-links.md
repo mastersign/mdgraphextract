@@ -1,8 +1,8 @@
 # Headline
 
 [First Headline][Headline]
-[Headline][]
-[Headline]
+    [Headline][]
+    [Headline]
 
 Multiple [links][Headline] in [one][Headline] [Headline].
 

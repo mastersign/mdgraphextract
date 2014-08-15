@@ -73,8 +73,8 @@ test('MdParser headlines', function(t) {
 test('MdParser internal links', function(t) {
 	var expected = [
 		{ target: 'Headline', text: 'First Headline', row: 3, column: 1 },
-		{ target: 'Headline', text: 'Headline', row: 4, column: 1 },
-		{ target: 'Headline', text: 'Headline', row: 5, column: 1 },
+		{ target: 'Headline', text: 'Headline', row: 4, column: 5 },
+		{ target: 'Headline', text: 'Headline', row: 5, column: 5 },
 		{ target: 'Headline', text: 'links', row: 7, column: 10 },
 		{ target: 'Headline', text: 'one', row: 7, column: 31 },
 		{ target: 'Headline', text: 'Headline', row: 7, column: 47 },
@@ -99,11 +99,12 @@ test('MdParser links', function(t) {
 		  row: 1, column: 12 },
 		{ text: 'mailto:link@xyz.com', url: 'mailto:link@xyz.com',
 		  row: 3, column: 23 },
-		{ text: 'URL', url: '../test.html', row: 5, column: 1 },
-		{ text: 'link', url: 'ftp://link', row: 8, column: 20 },
+		{ text: 'URL', url: '../test.html', row: 4, column: 5 },
+		{ text: 'link', url: 'ftp://link', row: 8, column: 1 },
 		{ text: 'hidden', url: 'hidden.txt', row: 8, column: 43 },
-		{ text: 'link', url: 'link.txt', row: 17, column: 13 },
-		{ text: 'link2.txt', url: 'link2.txt', row: 17, column: 31 }
+		{ text: 'http://www.example.com', url: 'http://www.example.com', row: 13, column: 1 },
+		{ text: 'link', url: 'link.txt', row: 18, column: 13 },
+		{ text: 'link2.txt', url: 'link2.txt', row: 18, column: 31 }
 	];
 
 	var p = new MdParser(fs.createReadStream('tests/data/links.md'));
@@ -128,7 +129,7 @@ test('MdParser code', function(t) {
 		{ text: '<code 4>', row: 15, column: 1 },
 		{ text: '# <code 5>', row: 16, column: 1 },
 		{ text: '', row: 17, column: 1 },
-		{ typ: 'end', row: 17, column: 2 },
+		{ typ: 'end', row: 17, column: 2 }
 	];
 
 	var p = new MdParser(fs.createReadStream('tests/data/code.md'));

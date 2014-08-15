@@ -9,7 +9,7 @@ var headline2Pattern = /^--+\s*$/;
 
 var internalLinkPattern = /(?:^|[^\]\)])\[([^\]]+)\](?:\[([^\]]*)\])?/g;
 
-var externalLinkPattern = /\[([^\]]+)\]\(([^\)]+)\)/g;
+var externalLinkPattern = /(?:^|[^\]])\[([^\]]+)\]\(([^\)]+)\)/g;
 var urlLinkPattern = /<([^>\s]+)>/g;
 
 var codePattern = /^(?: {4}|\t)(.*)$/;
@@ -89,33 +89,30 @@ var MdParser = function(input) {
 				return false;
 			}
 		}
-		
+
 		// code
 
 		if (!inComment) {
 			if (match(codePattern, line, function(m) {
-				if (!inCode && lastLine.trim().length > 0) {
-					return;
-				}
-				if (!inCode && m[1].length === 0) {
-					return;
-				}
-				if (!inCode) {
+				if (!inCode && lastLine.trim().length === 0 && m[1].length > 0) {
 					inCode = true;
 					that.emit('startCode', {
 						row: row, 
 						column: 1
 					});
 				}
-				that.emit('code', { 
-					row: row,
-					column: 1,
-					text: m[1]
-				});
-				
-			})) {
-				lastLine = line;
-				return; 
+				if (inCode) {
+					that.emit('code', { 
+						row: row,
+						column: 1,
+						text: m[1]
+					});
+				}
+			}) > 0) {
+				if (inCode) {
+					lastLine = line;
+					return; 
+				}
 			}
 			if (inCode) {
 				that.emit('endCode', { 
@@ -223,6 +220,8 @@ var MdParser = function(input) {
 			});
 		});
 
+		// internal links
+
 		match(internalLinkPattern, line, function(m) {
 			if (isInComment(m)) return;
 			if (m[2]) {
@@ -248,7 +247,7 @@ var MdParser = function(input) {
 			if (isInComment(m)) return;
 			that.emit('link', {
 				row: row, 
-				column: m.index + 1,
+				column: m.index > 0 ? m.index + 2 : m.index + 1,
 				text: m[1],
 				url: m[2]
 			});
