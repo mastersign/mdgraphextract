@@ -61,15 +61,13 @@ test('MdParser headlines', function(t) {
 		  row: 32, column: 1 }
 	];
 
-	var p = new MdParser();
+	var p = new MdParser(fs.createReadStream('tests/data/headlines.md'));
 	var result = [];
 	p.on('headline', function(hl) { result.push(hl); });
 	p.on('end', function() {
 		checkObjectArray(t, result, expected);
 		t.end();
 	});
-
-	p.parse(fs.createReadStream('tests/data/headlines.md'));
 });
 
 test('MdParser internal links', function(t) {
@@ -85,15 +83,13 @@ test('MdParser internal links', function(t) {
 		{ target: 'Headline', text: 'very last 2', row: 17, column: 25 }
 	];
 
-	var p = new MdParser();
+	var p = new MdParser(fs.createReadStream('tests/data/internal-links.md'));
 	var result = [];
 	p.on('internal-link', function(hl) { result.push(hl); });
 	p.on('end', function() {
 		checkObjectArray(t, result, expected);
 		t.end();
 	});
-
-	p.parse(fs.createReadStream('tests/data/internal-links.md'));
 });
 
 test('MdParser links', function(t) {
@@ -110,15 +106,13 @@ test('MdParser links', function(t) {
 		{ text: 'link2.txt', url: 'link2.txt', row: 17, column: 31 }
 	];
 
-	var p = new MdParser();
+	var p = new MdParser(fs.createReadStream('tests/data/links.md'));
 	var result = [];
 	p.on('link', function(hl) { result.push(hl); });
 	p.on('end', function() {
 		checkObjectArray(t, result, expected);
 		t.end();
 	});
-
-	p.parse(fs.createReadStream('tests/data/links.md'));
 });
 
 test('MdParser code', function(t) {
@@ -137,7 +131,7 @@ test('MdParser code', function(t) {
 		{ typ: 'end', row: 17, column: 2 },
 	];
 
-	var p = new MdParser();
+	var p = new MdParser(fs.createReadStream('tests/data/code.md'));
 	var result = [];
 	p.on('code', function(hl) { result.push(hl); });
 	p.on('startCode', function(e) { e.typ = 'start'; result.push(e); });
@@ -146,8 +140,6 @@ test('MdParser code', function(t) {
 		checkObjectArray(t, result, expected);
 		t.end();
 	});
-
-	p.parse(fs.createReadStream('tests/data/code.md'));
 });
 
 test('MdParser comments', function(t) {
@@ -176,7 +168,7 @@ test('MdParser comments', function(t) {
 		{ typ: 'end', row: 23, column: 14 }
 	];
 
-	var p = new MdParser();
+	var p = new MdParser(fs.createReadStream('tests/data/comments.md'));
 	var result = [];
 	p.on('comment', function(hl) { result.push(hl); });
 	p.on('startComment', function(e) { e.typ = 'start'; result.push(e); });
@@ -185,6 +177,4 @@ test('MdParser comments', function(t) {
 		checkObjectArray(t, result, expected);
 		t.end();
 	});
-
-	p.parse(fs.createReadStream('tests/data/comments.md'));
 });

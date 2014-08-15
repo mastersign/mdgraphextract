@@ -37,16 +37,19 @@ var match = function(re, text, fn) {
 	return cnt;
 };
 
-var MdParser = function() { };
-util.inherits(MdParser, EventEmitter);
+var MdParser = function(input) {
 
-MdParser.prototype.parse = function parse(input) {
 	var that = this;
 
 	var s = lines(input);
 	if (s === undefined) {
-		throw 'Input null or undefined.';
+		throw 'Input is null or undefined.';
 	}
+	that.inputStream = s;
+
+	that.on('newListener', function() {
+		that.inputStream.resume();
+	});
 
 	var row = 0;
 	var lastLine = null;
@@ -263,6 +266,17 @@ MdParser.prototype.parse = function parse(input) {
 
 		lastLine = line.trim();
 	});
-}
+
+	s.pause();
+};
+util.inherits(MdParser, EventEmitter);
+
+MdParser.prototype.pause = function() {
+	this.inputStream.pause;
+};
+
+MdParser.prototype.resume = function() {
+	process.nextTick(this.inputStream.resume);
+};
 
 module.exports = MdParser;
