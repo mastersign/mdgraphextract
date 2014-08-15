@@ -1,6 +1,6 @@
 var util = require('util');
 var Readable = require('stream').Readable;
-var split = require('split');
+var split = require('split-stream');
 
 var TextSplitter = function(text) {
 	Readable.call(this, { objectMode: true });
@@ -31,7 +31,7 @@ var lines = function(input) {
 	} else if (input instanceof Buffer) {
 		return new TextSplitter(input.toString());
 	} else if (input instanceof Readable) {
-		return input.pipe(split());
+		return input.pipe(split.create());
 	} else {
 		throw 'Input not supported.';
 	}

@@ -17,7 +17,7 @@
   "author": "Tobias Kiertscher <dev@mastersign.de>",
   "license": "MIT",
   "dependencies": {
-    "split": "^0.3.0",
+    "split-stream": "^0.2.0",
     "vinyl": "^0.3.2"
   },
   "devDependencies": {
