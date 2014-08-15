@@ -1,10 +1,10 @@
 [2 Headline]
 
-# 1 Häd_line_
+# _1_ Hädline
 
-This is _some_ text.
-	[Subßection A]
-	[Subsection B]
+This is _some_ text with 
+    [Subßection **A**] and 
+    [Subsection **B**]
 
 Here comes `code`:
 
@@ -28,5 +28,5 @@ Comment A.2
 
 ## Subsection **B**
 
-[1 Hädline]
+[_1_ Hädline]
 **End** of the *example* text.
