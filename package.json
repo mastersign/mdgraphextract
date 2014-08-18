@@ -2,6 +2,7 @@
   "name": "mdgraphextract",
   "version": "0.1.0",
   "description": "Extracts graph information from a markdown file.",
+  "readme": "README.md",
   "main": "./src/index.js",
   "directories": {
     "test": "tests"
