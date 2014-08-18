@@ -1,5 +1,5 @@
 {
-  "name": "graphextract",
+  "name": "mdgraphextract",
   "version": "0.1.0",
   "description": "Extracts graph information from a markdown file.",
   "main": "./src/index.js",
