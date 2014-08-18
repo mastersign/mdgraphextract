@@ -38,7 +38,7 @@ var parseAttributes = function(text) {
 };
 
 var formatAttribute = function(key, value) {
-	return /\s/.test(value)
+	return /\W/.test(value)
 		? key + '="' + value + '"' 
 		: key + '=' + value;
 };
