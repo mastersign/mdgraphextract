@@ -13,7 +13,9 @@
   "keywords": [
     "markdown",
     "graph",
-    "dot"
+    "dot",
+    "graphviz",
+    "gulp"
   ],
   "author": "Tobias Kiertscher <dev@mastersign.de>",
   "license": "MIT",
