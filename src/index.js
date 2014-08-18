@@ -1,7 +1,7 @@
 var through = require('through2');
 var Readable = require('stream').Readable;
 var util = require('util');
-var panclean = require('./panclean');
+var path = require('path');
 
 var MdParser = require('./mdparser');
 
@@ -12,12 +12,11 @@ var autograph = function(es) {
 
 	es._parser.on('headline', function(e) {
 		node = e.text;
-		es.push('\tnode: "' + node + '"\n');
+		es.push('\tnode: "' + node + '";\n');
 	});
 	es._parser.on('internal-link', function(e) {
-		var target = panclean.removeFormat(e.target)
 		if (node) {
-			es.push('\tedge: "' + node + '" -> "' + target + '"\n');
+			es.push('\tedge: "' + node + '" -> "' + e.targetText + '";\n');
 		}
 	});
 

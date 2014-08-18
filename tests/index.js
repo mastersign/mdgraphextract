@@ -6,14 +6,14 @@ var graphextract = require('../src/index');
 
 var autographResult =
 	'digraph G {\n' +
-	'\tnode: "1 Hädline"\n' +
-	'\tedge: "1 Hädline" -> "Subßection A"\n' +
-	'\tedge: "1 Hädline" -> "Subsection B"\n' +
-	'\tnode: "2 Headline"\n' +
-	'\tnode: "Subßection A"\n' +
-	'\tedge: "Subßection A" -> "2 Headline"\n' +
-	'\tnode: "Subsection B"\n' +
-	'\tedge: "Subsection B" -> "1 Hädline"\n' +
+	'\tnode: "1 Hädline";\n' +
+	'\tedge: "1 Hädline" -> "Subßection A";\n' +
+	'\tedge: "1 Hädline" -> "Subsection B";\n' +
+	'\tnode: "2 Headline";\n' +
+	'\tnode: "Subßection A";\n' +
+	'\tedge: "Subßection A" -> "2 Headline";\n' +
+	'\tnode: "Subsection B";\n' +
+	'\tedge: "Subsection B" -> "1 Hädline";\n' +
 	'}\n';
 
 test('graphextract.ExtractingStream text: autograph mode', function(t) {
