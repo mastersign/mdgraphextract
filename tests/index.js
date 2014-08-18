@@ -1,5 +1,6 @@
 var test = require('tape').test;
 var fs = require('fs');
+var path = require('path');
 var File = require('vinyl');
 
 var graphextract = require('../src/index');
@@ -115,6 +116,26 @@ test('graphextract() with file stream', function(t) {
 		data.contents.on('end', function() {
 			t.equals(result, autographResult, 'dot output equals expectation');
 		});
+	});
+	ge.on('end', function() {
+		t.end();
+	});
+	ge.write(f);
+});
+
+test('graphextract() change file name extension', function(t) {
+	var f = new File({
+		cwd: 'tests/',
+		base: 'data/',
+		path: 'data/doc_autograph.md',
+		contents: fs.readFileSync('tests/data/doc_autograph.md')
+	});
+
+	var result = '';
+	var ge = graphextract();
+	t.plan(1);
+	ge.on('data', function(data) {
+		t.equals(path.extname(data.path), '.gv');
 	});
 	ge.on('end', function() {
 		t.end();

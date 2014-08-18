@@ -78,6 +78,10 @@ var extract = function(data) {
 	});
 }
 
+var changeFilenameExtension = function(filename, newExt) {
+	return filename.slice(0, -path.extname(filename).length) + newExt;
+};
+
 var graphextract = function(opt) {
 	opt = opt || {};
 	return through.obj(function(file, enc, cb) {
@@ -90,12 +94,14 @@ var graphextract = function(opt) {
 			// extract asynchronously
 			extract(file.contents, function(result) {
 				file.contents = result;
+				file.path = changeFilenameExtension(file.path, '.gv');
 				that.push(file);
 				cb();
 			});
 		} else if (file.isStream()) {
 			// create extracting stream
 			file.contents = new ExtractingStream(file.contents, opt);
+			file.path = changeFilenameExtension(file.path, '.gv');
 			that.push(file);
 			cb();
 		}
