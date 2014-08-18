@@ -12,11 +12,11 @@ var autograph = function(es) {
 
 	es._parser.on('headline', function(e) {
 		node = e.text;
-		es.push('\tnode: "' + node + '";\n');
+		es.push('\t"' + node + '";\n');
 	});
 	es._parser.on('internal-link', function(e) {
 		if (node) {
-			es.push('\tedge: "' + node + '" -> "' + e.targetText + '";\n');
+			es.push('\t"' + node + '" -> "' + e.targetText + '";\n');
 		}
 	});
 	es._parser.on('end', function() {
@@ -215,7 +215,7 @@ var dotex = function(es) {
 				}
 				attributesString = formatAttributes(
 					nodeBaseAttributes, attributes);
-				push('node "' + nodeName + '"' + 
+				push('"' + nodeName + '"' + 
 					(attributesString 
 						? ' [' + attributesString + ']'
 						: ''));
@@ -242,7 +242,7 @@ var dotex = function(es) {
 				}
 				attributesString = formatAttributes(
 					nodeBaseAttributes, typeAttributes, attributes);
-				push('node "' + nodeName + '"' + 
+				push('"' + nodeName + '"' + 
 					(attributesString 
 						? ' [' + attributesString + ']'
 						: ''));
@@ -267,7 +267,7 @@ var dotex = function(es) {
 				attributes = parseAttributes(m[4]);
 				attributesString = formatAttributes(
 					edgeBaseAttributes, typeAttributes, attributes);
-				push('edge "' + nodeName + '" -> "' + nodeName2 + '"' + 
+				push('"' + nodeName + '" -> "' + nodeName2 + '"' + 
 					(attributesString 
 						? ' [' + attributesString + ']'
 						: ''));
@@ -354,7 +354,7 @@ var graphextract = function(opt) {
 			cb();
 		} else if (file.isBuffer()) {
 			// extract asynchronously
-			extract(file.contents, function(result) {
+			extract(file.contents, opt, function(result) {
 				file.contents = result;
 				file.path = changeFilenameExtension(file.path, '.gv');
 				that.push(file);

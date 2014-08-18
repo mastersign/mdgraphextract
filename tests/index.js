@@ -7,14 +7,14 @@ var graphextract = require('../src/index');
 
 var autographResult =
 	'digraph G {\n' +
-	'\tnode: "1 Hädline";\n' +
-	'\tedge: "1 Hädline" -> "Subßection A";\n' +
-	'\tedge: "1 Hädline" -> "Subsection B";\n' +
-	'\tnode: "2 Headline";\n' +
-	'\tnode: "Subßection A";\n' +
-	'\tedge: "Subßection A" -> "2 Headline";\n' +
-	'\tnode: "Subsection B";\n' +
-	'\tedge: "Subsection B" -> "1 Hädline";\n' +
+	'\t"1 Hädline";\n' +
+	'\t"1 Hädline" -> "Subßection A";\n' +
+	'\t"1 Hädline" -> "Subsection B";\n' +
+	'\t"2 Headline";\n' +
+	'\t"Subßection A";\n' +
+	'\t"Subßection A" -> "2 Headline";\n' +
+	'\t"Subsection B";\n' +
+	'\t"Subsection B" -> "1 Hädline";\n' +
 	'}\n';
 
 test('graphextract.ExtractingStream text: autograph mode', function(t) {
@@ -175,7 +175,7 @@ test('graphextract.extract() with string: dotex mode, node attributes', function
 		'<!-- @n abc <type1>: style=box -->';
 	var expected = 
 		'digraph G {\n' +
-		'\tnode "abc" [color=#FFFFFF fillcolor=#000000 style=box];\n' +
+		'\t"abc" [color=#FFFFFF fillcolor=#000000 style=box];\n' +
 		'}\n';
 
 	graphextract.extract(text, { mode: 'dotex' }, function(result) {
@@ -190,7 +190,7 @@ test('graphextract.extract() with string: dotex mode, context node', function(t)
 		'<!-- @node -->';
 	var expected = 
 		'digraph G {\n' +
-		'\tnode "H1" [url=#h1];\n' +
+		'\t"H1" [url=#h1];\n' +
 		'}\n';
 
 	graphextract.extract(text, { mode: 'dotex' }, function(result) {
@@ -207,7 +207,7 @@ test('graphextract.extract() with string: dotex mode, edge attributes', function
 		'<!-- @e A -> B <type1>: arrowhead="vee" -->';
 	var expected = 
 		'digraph G {\n' +
-		'\tedge "A" -> "B" [arrowhead=vee color=#FFFFFF style=dashed];\n' +
+		'\t"A" -> "B" [arrowhead=vee color=#FFFFFF style=dashed];\n' +
 		'}\n';
 
 	graphextract.extract(text, { mode: 'dotex' }, function(result) {
@@ -222,7 +222,7 @@ test('graphextract.extract() with string: dotex mode, context edge', function(t)
 		'<!-- @e -> H2 -->';
 	var expected = 
 		'digraph G {\n' +
-		'\tedge "H1" -> "H2";\n' +
+		'\t"H1" -> "H2";\n' +
 		'}\n';
 
 	graphextract.extract(text, { mode: 'dotex' }, function(result) {
@@ -236,13 +236,13 @@ test('graphextract.extract() with string: dotex mode, doc_dotex', function(t) {
 	var expected = 
 		'digraph "Graph" {\n' +
 		'\tcenter=true;\n' +
-		'\tnode "H1" [color=#00FF00 fillcolor=#0000FF style=filled url=#h1];\n' +
-		'\tedge "H1" -> "SH12" [color=#FF0000];\n' +
-		'\tnode "SH11" [color=#FFFF00 fillcolor=#0000FF style=filled url=#sh11];\n' +
-		'\tedge "SH11" -> "H1" [color=#000000];\n' +
-		'\tnode "SH12" [color=#FF0000 fillcolor=#0000FF style=filled url=#sh12];\n' +
-		'\tedge "SH12" -> "SH11" [color=#00FFFF];\n' +
-		'\tedge "SH11" -> "SH12" [color=#00FFFF style=dashed];\n' +
+		'\t"H1" [color=#00FF00 fillcolor=#0000FF style=filled url=#h1];\n' +
+		'\t"H1" -> "SH12" [color=#FF0000];\n' +
+		'\t"SH11" [color=#FFFF00 fillcolor=#0000FF style=filled url=#sh11];\n' +
+		'\t"SH11" -> "H1" [color=#000000];\n' +
+		'\t"SH12" [color=#FF0000 fillcolor=#0000FF style=filled url=#sh12];\n' +
+		'\t"SH12" -> "SH11" [color=#00FFFF];\n' +
+		'\t"SH11" -> "SH12" [color=#00FFFF style=dashed];\n' +
 		'}\n';
 
 	graphextract.extract(text, { mode: 'dotex' }, function(result) {

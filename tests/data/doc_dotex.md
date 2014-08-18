@@ -5,7 +5,7 @@
 @node-type nt1: color=#FF0000
 @edge-type et1: color=#00FFFF
 -->
-<!-- @node -->
+<!-- @node <nt1>: this="is invalid" -->
 
 # H1
 <!-- @node -->
