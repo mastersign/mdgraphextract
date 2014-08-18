@@ -230,14 +230,16 @@ var MdParser = function(input, encoding) {
 					row: row, 
 					column: m.index > 0 ? m.index + 2 : m.index + 1,
 					text: m[1],
-					target: m[2]
+					target: m[2],
+					targetText: panclean.removeFormat(m[2])
 				});
 			} else {
 				that.emit('internal-link', {
 					row: row, 
 					column: m.index > 0 ? m.index + 2 : m.index + 1,
 					text: m[1],
-					target: m[1]
+					target: m[1],
+					targetText: panclean.removeFormat(m[1])
 				});
 			}
 		});

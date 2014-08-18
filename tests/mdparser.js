@@ -72,15 +72,15 @@ test('MdParser headlines', function(t) {
 
 test('MdParser internal links', function(t) {
 	var expected = [
-		{ target: 'Headline', text: 'First Headline', row: 3, column: 1 },
-		{ target: 'Headline', text: 'Headline', row: 4, column: 5 },
-		{ target: 'Headline', text: 'Headline', row: 5, column: 5 },
-		{ target: 'Headline', text: 'links', row: 7, column: 10 },
-		{ target: 'Headline', text: 'one', row: 7, column: 31 },
-		{ target: 'Headline', text: 'Headline', row: 7, column: 47 },
-		{ target: 'Headline', text: 'last', row: 9, column: 23 },
-		{ target: 'Headline', text: 'very last 1', row: 15, column: 28 },
-		{ target: 'Headline', text: 'very last 2', row: 17, column: 25 }
+		{ target: 'Headline', targetText: 'Headline', text: 'First Headline', row: 3, column: 1 },
+		{ target: 'Headline', targetText: 'Headline', text: 'Headline', row: 4, column: 5 },
+		{ target: 'Headline', targetText: 'Headline', text: 'Headline', row: 5, column: 5 },
+		{ target: 'Headline', targetText: 'Headline', text: 'links', row: 7, column: 10 },
+		{ target: 'Headline', targetText: 'Headline', text: 'one', row: 7, column: 31 },
+		{ target: 'Headline', targetText: 'Headline', text: 'Headline', row: 7, column: 47 },
+		{ target: 'Headline', targetText: 'Headline', text: 'last', row: 9, column: 23 },
+		{ target: 'Headline', targetText: 'Headline', text: 'very last 1', row: 15, column: 28 },
+		{ target: 'Headline', targetText: 'Headline', text: 'very last 2', row: 17, column: 25 }
 	];
 
 	var p = new MdParser(fs.createReadStream('tests/data/internal-links.md'));
