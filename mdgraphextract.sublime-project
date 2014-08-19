@@ -5,7 +5,7 @@
 			"name": "Project Setup",
 			"path": ".",
 			"folder_exclude_patterns": ["*"],
-			"file_include_patterns": ["*.js", "*.json"]
+			"file_include_patterns": ["*.js", "*.json", "*.md"]
 		},
 		{
 			"name": "Code",
