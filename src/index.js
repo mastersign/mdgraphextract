@@ -63,7 +63,11 @@ var formatAttributes = function() {
 		keys.push(key);
 	}
 	return keys.
-		sort().
+		sort(function(a, b) { 
+			a = a.toLowerCase();
+			b = b.toLowerCase();
+			return ((a == b) ? 0 : ((a > b) ? 1 : -1));
+		}).
 		map(function(key) { return formatAttribute(key, m[key]); }).
 		join(' ');
 };
@@ -211,7 +215,7 @@ var dotex = function(es) {
 				nodeName = lastHeadline.text;
 				attributes = parseAttributes(cmdText);
 				if (lastHeadline && nodeName === lastHeadline.text) {
-					attributes['url'] = attributes['url'] || ('#' + lastHeadline.anchor);
+					attributes['URL'] = attributes['URL'] || ('#' + lastHeadline.anchor);
 				}
 				attributesString = formatAttributes(
 					nodeBaseAttributes, attributes);
@@ -238,7 +242,7 @@ var dotex = function(es) {
 				typeAttributes = nodeTypes[m[2]]
 				attributes = parseAttributes(m[3]);
 				if (lastHeadline && nodeName === lastHeadline.text) {
-					attributes['url'] = attributes['url'] || ('#' + lastHeadline.anchor);
+					attributes['URL'] = attributes['URL'] || ('#' + lastHeadline.anchor);
 				}
 				attributesString = formatAttributes(
 					nodeBaseAttributes, typeAttributes, attributes);

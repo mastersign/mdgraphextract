@@ -190,7 +190,7 @@ test('graphextract.extract() with string: dotex mode, context node', function(t)
 		'<!-- @node -->';
 	var expected = 
 		'digraph G {\n' +
-		'\t"H1" [url="#h1"];\n' +
+		'\t"H1" [URL="#h1"];\n' +
 		'}\n';
 
 	graphextract.extract(text, { mode: 'dotex' }, function(result) {
@@ -236,11 +236,11 @@ test('graphextract.extract() with string: dotex mode, doc_dotex', function(t) {
 	var expected = 
 		'digraph "Graph" {\n' +
 		'\tcenter=true;\n' +
-		'\t"H1" [color="#00FF00" fillcolor="#0000FF" style=filled url="#h1"];\n' +
+		'\t"H1" [color="#00FF00" fillcolor="#0000FF" style=filled URL="#h1"];\n' +
 		'\t"H1" -> "SH12" [color="#FF0000"];\n' +
-		'\t"SH11" [color="#FFFF00" fillcolor="#0000FF" style=filled url="#sh11"];\n' +
+		'\t"SH11" [color="#FFFF00" fillcolor="#0000FF" style=filled URL="#sh11"];\n' +
 		'\t"SH11" -> "H1" [color="#000000"];\n' +
-		'\t"SH12" [color="#FF0000" fillcolor="#0000FF" style=filled url="#sh12"];\n' +
+		'\t"SH12" [color="#FF0000" fillcolor="#0000FF" style=filled URL="#sh12"];\n' +
 		'\t"SH12" -> "SH11" [color="#00FFFF"];\n' +
 		'\t"SH11" -> "SH12" [color="#00FFFF" style=dashed];\n' +
 		'}\n';
