@@ -8,7 +8,7 @@ License: [MIT License](http://opensource.org/licenses/MIT)
 
 ## Modes
 
-MdGraphExtract has two operational modes:
+*MdGraphExtract* has two operational modes:
 
 ### Autograph Mode `auto`
 
@@ -45,7 +45,7 @@ digraph G {
 }
 ```
 
-Rendered with `dot` from GraphViz:
+Rendered with `dot` from *GraphViz*:
 
 ![](examples/autograph-example.png)
 
@@ -101,13 +101,13 @@ digraph "MyGraph" {
 }
 ```
 
-Rendered with `dot` from GraphViz:
+Rendered with `dot` from *GraphViz*:
 
 ![](examples/dotex-example.png)
 
 ## Interface
 
-You can use MdGraphExtract in any Node.JS project, but it has additional support for Gulp.
+You can use *MdGraphExtract* in any *Node.JS* project, but it has additional support for *Gulp*.
 
 ### Usage with Gulp
 
@@ -136,7 +136,7 @@ gulp.task('autograph', function() {
 
 ### Usage with as a function
 
-Additional to the main function, which processes Vinyl files and is usable in Gulp files, there is a simple asynchronous `extract()` function.
+Additional to the main function, which processes *Vinyl* files and is usable in *Gulp* files, there is a simple asynchronous `extract()` function.
 
 `extract(data[, opt], cb)`
 
@@ -160,7 +160,7 @@ The `extract()` function can take a string, a buffer, or a stream as input. The 
 
 ### Usage as a readable stream
 
-At last MdGraphExtract provides the pseudo-class `ExtractingStream`.
+At last *MdGraphExtract* provides the pseudo-class `ExtractingStream`.
 
 `new ExtractingStream(input[, opt])`
 
