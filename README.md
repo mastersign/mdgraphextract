@@ -1,6 +1,10 @@
 # MdGraphExtract
 
-Extracts a graph from a Markdown file.
+Extracts a graph in DOT format from a Markdown file.
+
+Author: Tobias Kiertscher <dev@mastersign.de>
+
+License: [MIT License](http://opensource.org/licenses/MIT)
 
 ## Modes
 
@@ -10,9 +14,96 @@ MdGraphExtract has two operational modes:
 
 Extracts nodes and edges from headlines and internal links.
 
+Example Markdown document:
+
+```Markdown
+# First Chapter
+Text with an internal link to [Section 1.1] and [Section 1.2].
+
+## Section 1.1
+This section references [Second Chapter][].
+
+## Section 1.2
+This section stands for its own.
+
+# Second Chapter
+And here is a link to [the first chapter][First Chapter].
+```
+
+Resulting DOT file:
+
+```DOT
+digraph G {
+    "First Chapter";
+    "First Chapter" -> "Section 1.1";
+    "First Chapter" -> "Section 1.2";
+    "Section 1.1";
+    "Section 1.1" -> "Second Chapter";
+    "Section 1.2";
+    "Second Chapter";
+    "Second Chapter" -> "First Chapter";
+}
+```
+
+Rendered with `dot` from GraphViz:
+
+![](examples/autograph-example.png)
+
 ### DotExtract Mode `dotex`
 
 Extracts DOT commands from HTML-comments under consideration of the last headline.
+
+Example Markdown document:
+
+```Markdown
+<!-- 
+@graph MyGraph: fontname=Helvetica
+@node-attributes shape=rect style="filled, rounded" fillcolor=#A0D0FF
+@edge-attributes color=#2040C0
+@node-type important: fillcolor=#FFD0A0
+@edge-type weak: style=dashed
+-->
+
+# First Chapter
+<!-- @node -->
+<!-- @edge -> Section 1.1 <weak> -->
+<!-- @edge -> Section 1.2 <weak> -->
+Text paragraph is weakly linked with Section 1.1 and 1.2.
+
+## Section 1.1
+<!-- @node <important>: label="Sect. (1.1)" -->
+<!-- @edge -> Second Chapter -->
+This section is linked to the Second Chapter.
+
+## Section 1.2
+<!-- @node label="Sect. (1.2)" -->
+This section stands for its own.
+
+<!-- @node Second Chapter: label="Chapter 2" -->
+<!-- @edge Second Chapter -> First Chapter -->
+# Second Chapter
+And the last chapter is linked with the first chapter.
+```
+
+Resulting DOT file:
+
+```DOT
+digraph "MyGraph" {
+    fontname=Helvetica;
+    "First Chapter" [fillcolor="#A0D0FF" shape=rect style="filled, rounded" URL="#first-chapter"];
+    "First Chapter" -> "Section 1.1" [color="#2040C0" style=dashed];
+    "First Chapter" -> "Section 1.2" [color="#2040C0" style=dashed];
+    "Section 1.1" [fillcolor="#FFD0A0" label="Sect. (1.1)" shape=rect style="filled, rounded" URL="#section-1.1"];
+    "Section 1.1" -> "Second Chapter" [color="#2040C0"];
+    "Section 1.2" [fillcolor="#A0D0FF" label="Sect. (1.2)" shape=rect style="filled, rounded" URL="#section-1.2"];
+    "Second Chapter" [fillcolor="#A0D0FF" label="Chapter 2" shape=rect style="filled, rounded"];
+    "Second Chapter" -> "First Chapter" [color="#2040C0"];
+}
+```
+
+Rendered with `dot` from GraphViz:
+
+![](examples/dotex-example.png)
 
 ## Interface
 

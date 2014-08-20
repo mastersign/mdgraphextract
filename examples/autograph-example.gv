@@ -1,0 +1,10 @@
+digraph G {
+	"First Chapter";
+	"First Chapter" -> "Section 1.1";
+	"First Chapter" -> "Section 1.2";
+	"Section 1.1";
+	"Section 1.1" -> "Second Chapter";
+	"Section 1.2";
+	"Second Chapter";
+	"Second Chapter" -> "First Chapter";
+}
