@@ -74,6 +74,7 @@ test('graphextract() should pass empty files', function(t) {
 		t.end();
 	});
 	ge.write(f);
+	ge.end();
 });
 
 test('graphextract() with file buffer', function(t) {
@@ -95,6 +96,7 @@ test('graphextract() with file buffer', function(t) {
 		t.end();
 	});
 	ge.write(f);
+	ge.end();
 });
 
 test('graphextract() with file stream', function(t) {
@@ -141,6 +143,7 @@ test('graphextract() change file name extension', function(t) {
 		t.end();
 	});
 	ge.write(f);
+	ge.end();
 });
 
 test('graphextract.extract() with string: dotex mode, empty named graph', function(t) {
