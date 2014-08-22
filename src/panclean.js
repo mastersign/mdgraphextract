@@ -1,4 +1,5 @@
 var removeFormat = function(title) {
+	if (!title) return '';
 	title = title.replace(/(\*\*?)(.*?)\1/g, '$2');
 	title = title.replace(/(__?)(.*?)\1/g, '$2');
 	title = title.replace(/`(.*?)`/g, '$1');
