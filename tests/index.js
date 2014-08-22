@@ -5,12 +5,20 @@ var File = require('vinyl');
 
 var graphextract = require('../src/index');
 
-var autographResult =
+var autographResult = 
 	'digraph G {\n' +
 	'\t"1 Hädline";\n' +
 	'\t"1 Hädline" -> "Subßection A";\n' +
 	'\t"1 Hädline" -> "Subsection B";\n' +
 	'\t"2 Headline";\n' +
+	'\t"Subßection A";\n' +
+	'\t"Subßection A" -> "2 Headline";\n' +
+	'\t"Subsection B";\n' +
+	'\t"Subsection B" -> "1 Hädline";\n' +
+	'}\n';
+
+var autographResult2 =
+	'digraph G {\n' +
 	'\t"Subßection A";\n' +
 	'\t"Subßection A" -> "2 Headline";\n' +
 	'\t"Subsection B";\n' +
@@ -50,6 +58,15 @@ test('graphextract.extract() with string: autograph mode', function(t) {
 
 	graphextract.extract(text, function(result) {
 		t.equals(result, autographResult, 'dot output equals expectation');
+		t.end();
+	});
+});
+
+test('graphextract.extract() with string: autograph mode (level = 2)', function(t) {
+	var text = fs.readFileSync('tests/data/doc_autograph.md', 'utf8');
+
+	graphextract.extract(text, { autographLevel: 2 }, function(result) {
+		t.equals(result, autographResult2, 'dot output equals expectation');
 		t.end();
 	});
 });

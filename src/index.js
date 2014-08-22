@@ -5,12 +5,14 @@ var path = require('path');
 
 var MdParser = require('./mdparser');
 
-var autograph = function(es) {
+var autograph = function(es, opt) {
 	var node = null;
+	var level = opt.autographLevel;
 
 	es.push('digraph G {\n');
 
 	es._parser.on('headline', function(e) {
+		if (level && level != e.level) return;
 		node = e.text;
 		es.push('\t"' + node + '";\n');
 	});
@@ -72,7 +74,7 @@ var formatAttributes = function() {
 		join(' ');
 };
 
-var dotex = function(es) {
+var dotex = function(es, opt) {
 	var graph = null;
 	var lastHeadline = null;
 
@@ -302,9 +304,9 @@ var ExtractingStream = function(input, opt) {
 	that._parser = new MdParser(input, opt.encoding);
 
 	if ((opt.mode || 'auto') === 'auto') {
-		autograph(that);
+		autograph(that, opt);
 	} else if (opt.mode === 'dotex') {
-		dotex(that);
+		dotex(that, opt);
 	} else {
 		throw "Unsupported mode.";
 	}

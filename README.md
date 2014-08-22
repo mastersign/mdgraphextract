@@ -140,7 +140,7 @@ Additional to the main function, which processes *Vinyl* files and is usable in 
 
 `extract(data[, opt], cb)`
 
-The `opt` object can have the `mode` attribute with `"auto"` or `"dotex"` as value. And it can have the `encoding` attribute with an input encoding, in case the input is binary.
+The `opt` object can have the `mode` attribute with `"auto"` or `"dotex"` as value. And it can have the `encoding` attribute with an input encoding, in case the input is binary. If the `mode` is set to `auto`, than the additional attribute `autographLevel` is recognized, which specifies the headline level to use as the link context.
 
 Mini-Example with the `extract()` function:
 
@@ -164,7 +164,7 @@ At last *MdGraphExtract* provides the pseudo-class `ExtractingStream`.
 
 `new ExtractingStream(input[, opt])`
 
-The `opt` object can have the `mode` attribute with `"auto"` or `"dotex"` as value. And it can have the `encoding` attribute with an input encoding, in case the input is binary.
+The `opt` object can have the `mode` attribute with `"auto"` or `"dotex"` as value. And it can have the `encoding` attribute with an input encoding, in case the input is binary. If the `mode` is set to `auto`, than the additional attribute `autographLevel` is recognized, which specifies the headline level to use as the link context.
 
 Mini-Example with the `ExtractingStream` pseudo-class:
 
