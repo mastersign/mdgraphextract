@@ -26,7 +26,7 @@ var autograph = function(es) {
 };
 
 var parseAttributes = function(text) {
-	var attributePattern = /(\w+)=(?:(?:\"([^\"]*)\")|(?:(\S+)))/g;
+	var attributePattern = /(\w+)=(?:(?:\"([^\"]*)\")|(?:([^\s,]+)))/g;
 	var m;
 	var result = {};
 	text = text ? text.trim() : '';
