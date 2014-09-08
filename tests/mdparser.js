@@ -68,6 +68,7 @@ test('MdParser headlines', function(t) {
 		checkObjectArray(t, result, expected);
 		t.end();
 	});
+	p.resume();
 });
 
 test('MdParser internal links', function(t) {
@@ -90,6 +91,7 @@ test('MdParser internal links', function(t) {
 		checkObjectArray(t, result, expected);
 		t.end();
 	});
+	p.resume();
 });
 
 test('MdParser links', function(t) {
@@ -114,6 +116,7 @@ test('MdParser links', function(t) {
 		checkObjectArray(t, result, expected);
 		t.end();
 	});
+	p.resume();
 });
 
 test('MdParser code', function(t) {
@@ -141,6 +144,7 @@ test('MdParser code', function(t) {
 		checkObjectArray(t, result, expected);
 		t.end();
 	});
+	p.resume();
 });
 
 test('MdParser comments', function(t) {
@@ -178,4 +182,5 @@ test('MdParser comments', function(t) {
 		checkObjectArray(t, result, expected);
 		t.end();
 	});
+	p.resume();
 });

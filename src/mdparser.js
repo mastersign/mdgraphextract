@@ -42,15 +42,12 @@ var MdParser = function(input, encoding) {
 	var that = this;
 
 	var s = lines(input, encoding);
+	s.pause();
 	if (s === undefined) {
 		throw 'Invalid input.';
 	}
 	s.setEncoding('utf8');
 	that._inputStream = s;
-
-	that.on('newListener', function() {
-		that._inputStream.resume();
-	});
 
 	var row = 0;
 	var lastLine = null;
@@ -268,8 +265,6 @@ var MdParser = function(input, encoding) {
 
 		lastLine = line.trim();
 	});
-
-	s.pause();
 };
 util.inherits(MdParser, EventEmitter);
 
