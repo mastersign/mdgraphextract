@@ -24,7 +24,7 @@ var autograph = function(es, opt) {
 	es._parser.on('end', function() {
 		es.push('}\n');
 		es.push(null);
-	})
+	});
 };
 
 var parseAttributes = function(text) {
@@ -332,8 +332,8 @@ var extract = function(data) {
 	var cb = arguments.length === 3 ? arguments[2] : arguments[1];
 	var es = new ExtractingStream(data, opt);
 	var chunks = [];
-	es.on('data', function(data) {
-		chunks.push(data);
+	es.on('data', function(buf) {
+		chunks.push(buf);
 	});
 	es.on('end', function() {
 		if (typeof(data) === 'string') {
@@ -344,7 +344,7 @@ var extract = function(data) {
 			cb(null);
 		}
 	});
-}
+};
 
 var changeFilenameExtension = function(filename, newExt) {
 	return filename.slice(0, -path.extname(filename).length) + newExt;
