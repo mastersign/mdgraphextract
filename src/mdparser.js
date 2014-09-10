@@ -208,6 +208,7 @@ var MdParser = function(input, encoding) {
 		}) ||
 		match(headline2Pattern, line, function(m) {
 			if (isInComment(m)) return;
+			if (row === 1) return;
 			that.emit('headline', {
 				row: row - 1, 
 				column: m.index + 1,
