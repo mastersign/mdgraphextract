@@ -3,22 +3,6 @@ var EventEmitter = require('events').EventEmitter;
 var lines = require('./lines');
 var panclean = require('./panclean');
 
-var headlinePattern = /^(#+)\s+(.*?)\s*$/;
-var headline1Pattern = /^==+\s*$/;
-var headline2Pattern = /^--+\s*$/;
-
-var internalLinkPattern = /(?:^|[^\]\)!])\[([^\]]+)\](?:\[([^\]]*)\])?/g;
-
-var externalLinkPattern = /(?:^|[^\]!])\[([^\]]+)\]\(([^\)]+)\)/g;
-var urlLinkPattern = /<([^>\s]+)>/g;
-
-var codePattern = /^(?: {4}|\t)(.*)$/;
-
-var commentPattern = /<!--(.*?)-->/g;
-
-var commentStartPattern = /(?:<!--)(?!.*<!--)(.*?)$/;
-var commentEndPattern = /^(.*?)-->/;
-
 var match = function(re, text, fn) {
 	var m;
 	var cnt = 0;
@@ -38,6 +22,22 @@ var match = function(re, text, fn) {
 };
 
 var MdParser = function(input, encoding) {
+
+	var headlinePattern = /^(#+)\s+(.*?)\s*$/;
+	var headline1Pattern = /^==+\s*$/;
+	var headline2Pattern = /^--+\s*$/;
+
+	var internalLinkPattern = /(?:^|[^\]\)!])\[([^\]]+)\](?:\[([^\]]*)\])?/g;
+
+	var externalLinkPattern = /(?:^|[^\]!])\[([^\]]+)\]\(([^\)]+)\)/g;
+	var urlLinkPattern = /<([^>\s]+)>/g;
+
+	var codePattern = /^(?: {4}|\t)(.*)$/;
+
+	var commentPattern = /<!--(.*?)-->/g;
+
+	var commentStartPattern = /(?:<!--)(?!.*<!--)(.*?)$/;
+	var commentEndPattern = /^(.*?)-->/;
 
 	var that = this;
 
