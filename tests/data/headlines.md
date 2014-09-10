@@ -1,3 +1,8 @@
+---
+title: test document
+author: my self
+...
+
 Preamble ...
 
 Main Headline
