@@ -188,6 +188,20 @@ test('graphextract.extract() with string: dotex mode, graph attributes', functio
 	});
 });
 
+test('graphextract.extract() with string: dotex mode, named graph with attributes', function(t) {
+	var text = '<!-- @g Graph: size="1, 1" fontname=Helvetica -->';
+	var expected = 
+		'digraph "Graph" {\n' +
+		'\tsize="1, 1";\n' +
+		'\tfontname=Helvetica;\n' +
+		'}\n';
+
+	graphextract.extract(text, { mode: 'dotex' }, function(result) {
+		t.equals(result, expected, 'dot output equals expectation');
+		t.end();
+	});
+});
+
 test('graphextract.extract() with string: dotex mode, node attributes', function(t) {
 	var text = 
 		'<!-- @na fillcolor="#000000" color="#FF0000" -->' +
