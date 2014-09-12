@@ -51,9 +51,13 @@ var parseAttributes = function(text) {
 };
 
 var formatAttribute = function(key, value) {
-	return /\W/.test(value)
-		? key + '="' + value + '"' 
-		: key + '=' + value;
+	if (value.length > 2 && value[0] === '<' && value[value.length - 1] === '>') {
+		return key + '=<' + value + '>';
+	}
+	if (/\W/.test(value)) {
+		return key + '="' + value + '"';
+	}
+	return key + '=' + value;
 };
 
 /**
