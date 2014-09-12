@@ -1,11 +1,11 @@
 digraph "MyGraph" {
-	fontname=Helvetica;
-	"First Chapter" [fillcolor="#A0D0FF" shape=rect style="filled, rounded" URL="#first-chapter"];
+	bgcolor=azure;
+	"First Chapter" [fillcolor="#A0D0FF" fontname=Helvetica shape=rect style="filled, rounded" URL="#first-chapter"];
 	"First Chapter" -> "Section 1.1" [color="#2040C0" style=dashed];
 	"First Chapter" -> "Section 1.2" [color="#2040C0" style=dashed];
-	"Section 1.1" [fillcolor="#FFD0A0" label="Sect. (1.1)" shape=rect style="filled, rounded" URL="#section-1.1"];
+	"Section 1.1" [fillcolor="#FFD0A0" fontname=Helvetica label="Sect. (1.1)" shape=rect style="filled, rounded" URL="#section-1.1"];
 	"Section 1.1" -> "Second Chapter" [color="#2040C0"];
-	"Section 1.2" [fillcolor="#A0D0FF" label="Sect. (1.2)" shape=rect style="filled, rounded" URL="#section-1.2"];
-	"Second Chapter" [fillcolor="#A0D0FF" label="Chapter 2" shape=rect style="filled, rounded"];
+	"Section 1.2" [fillcolor="#A0D0FF" fontname=Helvetica label="Sect. (1.2)" shape=rect style="filled, rounded" URL="#section-1.2"];
+	"Second Chapter" [fillcolor="#A0D0FF" fontname=Helvetica label="Chapter 2" shape=rect style="filled, rounded"];
 	"Second Chapter" -> "First Chapter" [color="#2040C0"];
 }

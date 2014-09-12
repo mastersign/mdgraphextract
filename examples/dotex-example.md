@@ -1,5 +1,6 @@
 <!-- 
-@graph MyGraph: fontname=Helvetica
+@graph MyGraph: bgcolor=azure
+@node-attributes fontname=Helvetica
 @node-attributes shape=rect style="filled, rounded" fillcolor=#A0D0FF
 @edge-attributes color=#2040C0
 @node-type important: fillcolor=#FFD0A0
