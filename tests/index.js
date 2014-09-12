@@ -19,14 +19,16 @@ var autographResult =
 
 var autographResult2 =
 	'digraph G {\n' +
-	'\t"Subßection A";\n' +
+	'\t"Subßection A" [URL="target.html#subßection-a"];\n' +
 	'\t"Subßection A" -> "2 Headline";\n' +
-	'\t"Subsection B";\n' +
+	'\t"Subsection B" [URL="target.html#subsection-b"];\n' +
 	'\t"Subsection B" -> "1 Hädline";\n' +
 	'}\n';
 
 test('graphextract.ExtractingStream text: autograph mode', function(t) {
-	var s = new graphextract.ExtractingStream(fs.createReadStream('tests/data/doc_autograph.md', 'utf8'));
+	var s = new graphextract.ExtractingStream(
+		fs.createReadStream('tests/data/doc_autograph.md', 'utf8'),
+		{ noAutoRefs: true });
 
 	var result = '';
 
@@ -40,7 +42,9 @@ test('graphextract.ExtractingStream text: autograph mode', function(t) {
 });
 
 test('graphextract.ExtractingStream binary: autograph mode', function(t) {
-	var s = new graphextract.ExtractingStream(fs.createReadStream('tests/data/doc_autograph.md'));
+	var s = new graphextract.ExtractingStream(
+		fs.createReadStream('tests/data/doc_autograph.md'),
+		{ noAutoRefs: true });
 
 	var result = '';
 
@@ -56,7 +60,7 @@ test('graphextract.ExtractingStream binary: autograph mode', function(t) {
 test('graphextract.extract() with string: autograph mode', function(t) {
 	var text = fs.readFileSync('tests/data/doc_autograph.md', 'utf8');
 
-	graphextract.extract(text, function(result) {
+	graphextract.extract(text, { noAutoRefs: true }, function(result) {
 		t.equals(result, autographResult, 'dot output equals expectation');
 		t.end();
 	});
@@ -65,7 +69,7 @@ test('graphextract.extract() with string: autograph mode', function(t) {
 test('graphextract.extract() with string: autograph mode (level = 2)', function(t) {
 	var text = fs.readFileSync('tests/data/doc_autograph.md', 'utf8');
 
-	graphextract.extract(text, { autographLevel: 2 }, function(result) {
+	graphextract.extract(text, { autographLevel: 2, refPrefix: 'target.html' }, function(result) {
 		t.equals(result, autographResult2, 'dot output equals expectation');
 		t.end();
 	});
@@ -74,7 +78,7 @@ test('graphextract.extract() with string: autograph mode (level = 2)', function(
 test('graphextract.extract() with buffer: autograph mode', function(t) {
 	var buffer = fs.readFileSync('tests/data/doc_autograph.md');
 
-	graphextract.extract(buffer, {encoding: 'utf8'}, function(result) {
+	graphextract.extract(buffer, { encoding: 'utf8', noAutoRefs: true }, function(result) {
 		t.equals(result.toString('utf8'), autographResult, 'dot output equals expectation');
 		t.end();
 	});
@@ -103,7 +107,7 @@ test('graphextract() with file buffer', function(t) {
 	});
 
 	var result = '';
-	var ge = graphextract({ encoding: 'utf8' });
+	var ge = graphextract({ encoding: 'utf8', noAutoRefs: true });
 	t.plan(2);
 	ge.on('data', function(data) {
 		t.ok(data.isBuffer(), 'content is a buffer');
@@ -125,7 +129,7 @@ test('graphextract() with file stream', function(t) {
 	});
 
 	var result = '';
-	var ge = graphextract({ encoding: 'utf8' });
+	var ge = graphextract({ encoding: 'utf8', noAutoRefs: true });
 	t.plan(2);
 	ge.on('data', function(data) {
 		t.ok(data.isStream(), 'content is a stream');
