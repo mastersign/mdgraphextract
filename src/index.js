@@ -177,17 +177,13 @@ var dotex = function(es, opt) {
 		case 'node-attributes':
 			// @node-attributes key=value1 key2="value 2"
 				attributes = parseAttributes(cmdText);
-				for (key in attributes) {
-					nodeBaseAttributes[key] = attributes[key];
-				}
+				push('node [' + formatAttributes(attributes) + ']');
 			break;
 		case 'ea':
 		case 'edge-attributes':
 			// @edge-attributes key=value1 key2="value 2"
 				attributes = parseAttributes(cmdText);
-				for (key in attributes) {
-					edgeBaseAttributes[key] = attributes[key];
-				}
+				push('edge [' + formatAttributes(attributes) + ']');
 			break;
 		case 'nt':
 		case 'node-type':
@@ -237,8 +233,7 @@ var dotex = function(es, opt) {
 				if (!attributes['URL'] && !noAutoRefs && lastHeadline && nodeName === lastHeadline.text) {
 					attributes['URL'] = refPrefix + '#' + lastHeadline.anchor;
 				}
-				attributesString = formatAttributes(
-					nodeBaseAttributes, attributes);
+				attributesString = formatAttributes(attributes);
 				push('"' + nodeName + '"' + 
 					(attributesString 
 						? ' [' + attributesString + ']'
@@ -265,7 +260,7 @@ var dotex = function(es, opt) {
 					attributes['URL'] = attributes['URL'] || ('#' + lastHeadline.anchor);
 				}
 				attributesString = formatAttributes(
-					nodeBaseAttributes, typeAttributes, attributes);
+					typeAttributes, attributes);
 				push('"' + nodeName + '"' + 
 					(attributesString 
 						? ' [' + attributesString + ']'
@@ -290,7 +285,7 @@ var dotex = function(es, opt) {
 				typeAttributes = edgeTypes[m[3]]
 				attributes = parseAttributes(m[4]);
 				attributesString = formatAttributes(
-					edgeBaseAttributes, typeAttributes, attributes);
+					typeAttributes, attributes);
 				push('"' + nodeName + '" -> "' + nodeName2 + '"' + 
 					(attributesString 
 						? ' [' + attributesString + ']'
