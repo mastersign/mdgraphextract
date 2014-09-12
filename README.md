@@ -34,13 +34,13 @@ Resulting DOT file:
 
 ```DOT
 digraph G {
-    "First Chapter";
+    "First Chapter" [URL="#first-chapter"];
     "First Chapter" -> "Section 1.1";
     "First Chapter" -> "Section 1.2";
-    "Section 1.1";
+    "Section 1.1" [URL="#section-1.1"];
     "Section 1.1" -> "Second Chapter";
-    "Section 1.2";
-    "Second Chapter";
+    "Section 1.2" [URL="#section-1.2"];
+    "Second Chapter" [URL="#second-chapter"];
     "Second Chapter" -> "First Chapter";
 }
 ```
