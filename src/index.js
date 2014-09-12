@@ -8,16 +8,27 @@ var MdParser = require('./mdparser');
 var autograph = function(es, opt) {
 	var node = null;
 	var level = opt.autographLevel;
+	var refPrefix = opt.refPrefix || '';
+	var noAutoRefs = opt.noAutoRefs;
 
 	es.push('digraph G {\n');
 
 	es._parser.on('headline', function(e) {
 		if (level && level != e.level) return;
+		var attributes = '';
+		if (!noAutoRefs) {
+			attributes = ' [URL="';
+			if (refPrefix) {
+				attributes = attributes + refPrefix;
+			}
+			attributes = attributes + '#' + e.anchor + '"]';
+		}
 		node = e.text;
-		es.push('\t"' + node + '";\n');
+		es.push('\t"' + node + '"' + attributes + ';\n');
 	});
 	es._parser.on('internal-link', function(e) {
 		if (node) {
+			
 			es.push('\t"' + node + '" -> "' + e.targetText + '";\n');
 		}
 	});
@@ -75,6 +86,9 @@ var formatAttributes = function() {
 };
 
 var dotex = function(es, opt) {
+	var noAutoRefs = opt.noAutoRefs;
+	var refPrefix = opt.refPrefix || '';
+
 	var graph = null;
 	var lastHeadline = null;
 
@@ -216,8 +230,8 @@ var dotex = function(es, opt) {
 				}
 				nodeName = lastHeadline.text;
 				attributes = parseAttributes(cmdText);
-				if (lastHeadline && nodeName === lastHeadline.text) {
-					attributes['URL'] = attributes['URL'] || ('#' + lastHeadline.anchor);
+				if (!attributes['URL'] && !noAutoRefs && lastHeadline && nodeName === lastHeadline.text) {
+					attributes['URL'] = refPrefix + '#' + lastHeadline.anchor;
 				}
 				attributesString = formatAttributes(
 					nodeBaseAttributes, attributes);
