@@ -1,3 +1,5 @@
+var xRegExp = require('xregexp').XRegExp;
+
 var removeFormat = function(title) {
 	if (!title) return '';
 	title = title.replace(/(\*\*?)(.*?)\1/g, '$2');
@@ -42,21 +44,6 @@ var getAttributes = function(title) {
 };
 module.exports.getAttributes = getAttributes;
 
-var anchor = function(title, cache) {
-	var id = getAttributes(title).id;
-	if (id) return id;
-	title = removeFormat(title);
-	title = title.replace(/^[\W\d]*/, '');
-	title = title.trim();
-	title = title.replace(/\s/g, '-');
-	title = title.replace(/[^\w_\-\.]/g, '');
-	title = title.toLowerCase();
-	if (title === '') {	title = 'section'; }
-	return title;
-};
-module.exports.anchor = anchor;
-
-
 /*
 Remove all formatting, links, etc.
 Remove all footnotes.
@@ -66,3 +53,17 @@ Convert all alphabetic characters to lowercase.
 Remove everything up to the first letter (identifiers may not begin with a number or punctuation mark).
 If nothing is left after this, use the identifier 'section'.
 */
+
+var anchor = function(title, cache) {
+	var id = getAttributes(title).id;
+	if (id) return id;
+	title = removeFormat(title);
+	title = title.replace(xRegExp('^[^\\p{L}]+', 'g'), '');
+	title = title.trim();
+	title = title.replace(/\s/g, '-');
+	title = title.replace(xRegExp('[^\\p{L}\\d_\\-\\.]', 'g'), '');
+	title = title.toLowerCase();
+	if (title === '') {	title = 'section'; }
+	return title;
+};
+module.exports.anchor = anchor;

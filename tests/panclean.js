@@ -84,9 +84,13 @@ test('panclean: anchor() remove leading non letters', function(t) {
 
 test('panclean: anchor() clean characters', function(t) {
 	t.equals(panclean.anchor(
-		'head-:line_|1|#+~*(23).'),
-		'head-line_123.',
+		'head-:line.|1|#+~*$§(23)@€.'),
+		'head-line.123.',
 		'remove punctuation');
+	t.equals(panclean.anchor(
+		'head-line_äöüÄÖÜßÂÅî'),
+		'head-line_äöüäöüßâåî',
+		'keep foreign language letters');
 	t.equals(panclean.anchor(
 		'head li\tne'),
 		'head-li-ne',
