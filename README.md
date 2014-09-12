@@ -120,7 +120,7 @@ var mdgraphextract = require('mdgraphextract');
 gulp.task('autograph', function() {
 	// grab all Markdown files in the docs folder
 	return gulp.src('docs/*.md')
-		// pipe them to MdGraphExtract in Autograph mode
+		// pipe them to MdGraphExtract in Autograph mode, passing options
 		.pipe(mdgraphextract({ mode: 'auto' }))
 		// write the resulting *.gv files to the docs folder
 		.pipe(gulp.dest('docs/'))
@@ -140,8 +140,6 @@ gulp.task('autograph', function() {
 Additional to the main function, which processes *Vinyl* files and is usable in *Gulp* files, there is a simple asynchronous `extract()` function.
 
 `extract(data[, opt], cb)`
-
-The `opt` object can have the `mode` attribute with `"auto"` or `"dotex"` as value. And it can have the `encoding` attribute with an input encoding, in case the input is binary. If the `mode` is set to `auto`, than the additional attribute `autographLevel` is recognized, which specifies the headline level to use as the link context.
 
 Mini-Example with the `extract()` function:
 
@@ -165,8 +163,6 @@ At last *MdGraphExtract* provides the pseudo-class `ExtractingStream`.
 
 `new ExtractingStream(input[, opt])`
 
-The `opt` object can have the `mode` attribute with `"auto"` or `"dotex"` as value. And it can have the `encoding` attribute with an input encoding, in case the input is binary. If the `mode` is set to `auto`, than the additional attribute `autographLevel` is recognized, which specifies the headline level to use as the link context.
-
 Mini-Example with the `ExtractingStream` pseudo-class:
 
 ```js
@@ -178,3 +174,25 @@ s.pipe(fs.createWriteStream('test.gv', 'utf8'));
 ```
 
 The `ExtractingStream` pseudo-class is constructed with a `Readable` stream as input. The second argument with the options is optional.
+
+### Options
+
+The following options are available:
+
+* The `mode` attribute controlles the operational mode of the graph extraction. It can have `"auto"` or `"dotex"` as value.
+* The `encoding` attribute specifying the input encoding, in case the input is binary. 
+* The `autographLevel` attribute is recognized, if the `mode` is set to `auto`, and specifies the headline level to use as the link context. 
+* The `noAutoRefs` attribute controlles the automatic generation of URL attributes for nodes from the auto-identifier of the related headline. If it set to `true`, no URL attributes will be auto-generated from the headlines. 
+* The `refPrefix` can be set to a string, which will be prefixing any auto-generated URL attribute.
+
+These are the default values for all options:
+
+```js
+{
+    "mode": "auto",
+    "encoding": "utf8",
+    "autographLevel": null,
+    "noAutoRefs": false,
+    "refPrefix": ""
+}
+```
