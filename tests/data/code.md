@@ -16,4 +16,22 @@ And this is another
 	# <code 5>
 	
 
+Text inbetween.
+
+```
+simple
+
+fenced code
+```
+
+~~~~~~
+~~~
+more fenced code
+~~~
+~~~~~~
+
+~~~js
+function() { /* fenced code with attributes */ }
+~~~
+
 And some text at the end.

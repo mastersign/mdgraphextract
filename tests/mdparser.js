@@ -132,7 +132,20 @@ test('MdParser code', function(t) {
 		{ text: '<code 4>', row: 15, column: 1 },
 		{ text: '# <code 5>', row: 16, column: 1 },
 		{ text: '', row: 17, column: 1 },
-		{ typ: 'end', row: 17, column: 2 }
+		{ typ: 'end', row: 17, column: 2 },
+		{ typ: 'start', row: 22, column: 1, codeAttributes: '' },
+		{ text: 'simple', row: 22, column: 1 },
+		{ text: '', row: 23, column: 1 },
+		{ text: 'fenced code', row: 24, column: 1 },
+		{ typ: 'end', row: 24, column: 12 },
+		{ typ: 'start', row: 28, column: 1, codeAttributes: '' },
+		{ text: '~~~', row: 28, column: 1 },
+		{ text: 'more fenced code', row: 29, column: 1 },
+		{ text: '~~~', row: 30, column: 1 },
+		{ typ: 'end', row: 30, column: 4 },
+		{ typ: 'start', row: 34, column: 1, codeAttributes: 'js' },
+		{ text: 'function() { /* fenced code with attributes */ }', row: 34, column: 1 },
+		{ typ: 'end', row: 34, column: 49 }
 	];
 
 	var p = new MdParser(fs.createReadStream('tests/data/code.md'));

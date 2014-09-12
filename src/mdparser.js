@@ -3,7 +3,7 @@ var EventEmitter = require('events').EventEmitter;
 var lines = require('./lines');
 var panclean = require('./panclean');
 
-var match = function(re, text, fn) {
+var match = function (re, text, fn) {
 	var m;
 	var cnt = 0;
 	re.lastIndex = 0;
@@ -21,7 +21,7 @@ var match = function(re, text, fn) {
 	return cnt;
 };
 
-var MdParser = function(input, encoding) {
+var MdParser = function (input, encoding) {
 
 	var headlinePattern = /^(#+)\s+(.*?)\s*$/;
 	var headline1Pattern = /^==+\s*$/;
@@ -33,6 +33,7 @@ var MdParser = function(input, encoding) {
 	var urlLinkPattern = /<([^>\s]+)>/g;
 
 	var codePattern = /^(?: {4}|\t)(.*)$/;
+	var fencedCodeStartPattern = /^(`{3,}|~{3,})\s*(.*?)\s*$/;
 
 	var commentPattern = /<!--(.*?)-->/g;
 
@@ -52,6 +53,8 @@ var MdParser = function(input, encoding) {
 	var row = 0;
 	var lastLine = null;
 	var inCode = false;
+	var inFencedCode = false;
+	var codeFence = null;
 	var inComment = false;
 
 	var anchorCache = {};
@@ -61,10 +64,9 @@ var MdParser = function(input, encoding) {
 		if (cnt) {
 			anchorCache[anchor] = cnt + 1;
 			return anchor + '_' + cnt;
-		} else {
-			anchorCache[anchor] = 1;
-			return anchor;
 		}
+		anchorCache[anchor] = 1;
+		return anchor;
 	}
 
 	s.on('end', function() {
@@ -78,7 +80,7 @@ var MdParser = function(input, encoding) {
 		var comments = [];
 		var lastComment = null;
 		var isInComment = function(m) {
-			var i;
+			var i, cm;
 			for (i = 0; i < comments.length; i++) {
 				cm = comments[i];
 				if (m.index >= cm.index && m.index < (cm.index + cm[0].length)) {
@@ -91,33 +93,66 @@ var MdParser = function(input, encoding) {
 		// code
 
 		if (!inComment) {
-			if (match(codePattern, line, function(m) {
-				if (!inCode && lastLine.trim().length === 0 && m[1].length > 0) {
-					inCode = true;
-					that.emit('startCode', {
-						row: row, 
-						column: 1
+			if (inFencedCode) {
+				if (line === codeFence) {
+					codeFence = null;
+					inFencedCode = false;
+					that.emit('endCode', {
+						row: row - 1,
+						column: lastLine.length + 1
 					});
-				}
-				if (inCode) {
-					that.emit('code', { 
+				} else {
+					that.emit('code', {
 						row: row,
 						column: 1,
-						text: m[1]
+						text: line
+					});
+					lastLine = line;
+					return;
+				}
+			} else {
+				if (match(codePattern, line, function(m) {
+					if (!inCode && lastLine.trim().length === 0 && m[1].length > 0) {
+						inCode = true;
+						that.emit('startCode', {
+							row: row, 
+							column: 1
+						});
+					}
+					if (inCode) {
+						that.emit('code', { 
+							row: row,
+							column: 1,
+							text: m[1]
+						});
+					}
+				}) > 0) {
+					if (inCode) {
+						lastLine = line;
+						return; 
+					}
+				}
+				if (inCode) {
+					inCode = false;
+					that.emit('endCode', { 
+						row: row - 1, 
+						column: lastLine.length + 1
 					});
 				}
-			}) > 0) {
-				if (inCode) {
-					lastLine = line;
-					return; 
+				if (match(fencedCodeStartPattern, line, function(m) {
+					inFencedCode = true;
+					codeFence = m[1];
+					that.emit('startCode', {
+						row: row + 1,
+						column: 1,
+						codeAttributes: m[2] || ''
+					});
+				}) > 0) {
+					if (inFencedCode) {
+						lastLine = line;
+						return;
+					}
 				}
-			}
-			if (inCode) {
-				that.emit('endCode', { 
-					row: row - 1, 
-					column: lastLine.length + 1
-				});
-				inCode = false;
 			}
 		}
 
