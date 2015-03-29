@@ -21,7 +21,7 @@ var getAttributes = function(title) {
 	var keyValPattern = /(?:^|\s)(\w+)=(?:\"([^\"]*)\"|(\w+))/g;
 	var attribMatch = attribPattern.exec(title);
 	var attribString, idMatch, classMatch, keyValMatch;
-	var result = {}
+	var result = {};
 	if (attribMatch) {
 		attribString = attribMatch[1];
 		idMatch = idPattern.exec(attribString);

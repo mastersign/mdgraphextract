@@ -67,7 +67,7 @@ var MdParser = function (input, encoding) {
 		}
 		anchorCache[anchor] = 1;
 		return anchor;
-	}
+	};
 
 	s.on('end', function() {
 		that.emit('end');
@@ -88,7 +88,7 @@ var MdParser = function (input, encoding) {
 				}
 				return false;
 			}
-		}
+		};
 
 		// code
 

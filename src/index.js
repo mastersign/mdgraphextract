@@ -46,7 +46,7 @@ var parseAttributes = function(text) {
 	if (text === '') return result;
 	while((m = attributePattern.exec(text)) !== null) {
 		result[m[1]] = m[2] || m[3];
-	};
+	}
 	return result;
 };
 
@@ -64,8 +64,8 @@ var formatAttribute = function(key, value) {
  * formatAttributes(attribs1, attribs2, ...)
  */
 var formatAttributes = function() {
-	var m = {}
-	var i;
+	var m = {};
+	var i, key;
 	var attributes;
 	var keys = [];
 	for (i = 0; i < arguments.length; i++) {
@@ -133,12 +133,13 @@ var dotex = function(es, opt) {
 			es.push('\t' + cache[i] + ';\n');
 		}
 		cache = [];
-	}
+	};
 
 	es._parser.on('headline', function(e) {
 		lastHeadline = e;
 	});
 	es._parser.on('comment', function(e) {
+		var key;
 		src = e.text.trim();
 		m = cmdPattern.exec(src);
 		if (!m) { return; }
@@ -230,14 +231,14 @@ var dotex = function(es, opt) {
 				}
 				nodeName = lastHeadline.text;
 				attributes = parseAttributes(cmdText);
-				if (!attributes['URL'] && !noAutoRefs && lastHeadline && nodeName === lastHeadline.text) {
-					attributes['URL'] = refPrefix + '#' + lastHeadline.anchor;
+				if (!attributes.URL && !noAutoRefs && lastHeadline && nodeName === lastHeadline.text) {
+					attributes.URL = refPrefix + '#' + lastHeadline.anchor;
 				}
 				attributesString = formatAttributes(attributes);
 				push('"' + nodeName + '"' + 
-					(attributesString 
-						? ' [' + attributesString + ']'
-						: ''));
+					(attributesString ?
+					 ' [' + attributesString + ']' :
+					 ''));
 				return;
 			}
 			// @node
@@ -254,17 +255,17 @@ var dotex = function(es, opt) {
 					return;
 				}
 				nodeName = m[1] || lastHeadline.text;
-				typeAttributes = nodeTypes[m[2]]
+				typeAttributes = nodeTypes[m[2]];
 				attributes = parseAttributes(m[3]);
 				if (lastHeadline && nodeName === lastHeadline.text) {
-					attributes['URL'] = attributes['URL'] || ('#' + lastHeadline.anchor);
+					attributes.URL = attributes.URL || ('#' + lastHeadline.anchor);
 				}
 				attributesString = formatAttributes(
 					typeAttributes, attributes);
 				push('"' + nodeName + '"' + 
-					(attributesString 
-						? ' [' + attributesString + ']'
-						: ''));
+					(attributesString ?
+						' [' + attributesString + ']' :
+					 	''));
 			}
 			break;
 		case 'e':
@@ -282,14 +283,14 @@ var dotex = function(es, opt) {
 				}
 				nodeName = m[1] || lastHeadline.text;
 				nodeName2 = m[2];
-				typeAttributes = edgeTypes[m[3]]
+				typeAttributes = edgeTypes[m[3]];
 				attributes = parseAttributes(m[4]);
 				attributesString = formatAttributes(
 					typeAttributes, attributes);
 				push('"' + nodeName + '" -> "' + nodeName2 + '"' + 
-					(attributesString 
-						? ' [' + attributesString + ']'
-						: ''));
+					(attributesString ?
+						' [' + attributesString + ']' :
+						''));
 			}
 			break;
 		}
