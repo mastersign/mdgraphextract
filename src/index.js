@@ -106,17 +106,14 @@ var dotex = function(es, opt) {
 	var src, cmd, cmdText;
 	var attributes, typeAttributes, attributesString;
 	var typeName;
-	var nodeName, nodeName2, url;
+	var nodeName, nodeName2;
 
-	var nodeBaseAttributes = [];
-	var edgeBaseAttributes = [];
 	var nodeTypes = {};
 	var edgeTypes = {};
 
 	var cache = [];
 
 	var push = function(content) {
-		var i;
 		if (graph) {
 			if (cache.length > 0) { 
 				flushCache();
@@ -128,6 +125,7 @@ var dotex = function(es, opt) {
 	};
 
 	var flushCache = function() {
+		var i;
 		if (graph === null) return;
 		for (i = 0; i < cache.length; i++) {
 			es.push('\t' + cache[i] + ';\n');
