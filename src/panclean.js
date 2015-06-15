@@ -16,7 +16,7 @@ module.exports.removeFormat = removeFormat;
 
 var getAttributes = function(title) {
 	var attribPattern = /\s\{((?:[^\}]|\"[^\"]*\")*)\}\s*$/;
-	var idPattern = /(?:^|\s)#(\w+)/;
+	var idPattern = /(?:^|\s)#([\w-\:\.]+)/;
 	var classPattern = /(?:^|\s)\.(\w+)/g;
 	var keyValPattern = /(?:^|\s)(\w+)=(?:\"([^\"]*)\"|(\w+))/g;
 	var attribMatch = attribPattern.exec(title);
