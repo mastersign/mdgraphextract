@@ -16,7 +16,7 @@ Extracts nodes and edges from headlines and internal links.
 
 Example Markdown document:
 
-```Markdown
+~~~ Markdown
 # First Chapter
 Text with an internal link to [Section 1.1] and [Section 1.2].
 
@@ -28,11 +28,11 @@ This section stands for its own.
 
 # Second Chapter
 And here is a link to [the first chapter][First Chapter].
-```
+~~~
 
 Resulting DOT file:
 
-```DOT
+~~~ DOT
 digraph G {
     "First Chapter" [URL="#first-chapter"];
     "First Chapter" -> "Section 1.1";
@@ -43,7 +43,7 @@ digraph G {
     "Second Chapter" [URL="#second-chapter"];
     "Second Chapter" -> "First Chapter";
 }
-```
+~~~
 
 Rendered with `dot` from *GraphViz*:
 
@@ -55,7 +55,7 @@ Extracts DOT commands from HTML-comments under consideration of the last headlin
 
 Example Markdown document:
 
-```Markdown
+~~~ Markdown
 <!-- 
 @graph MyGraph: bgcolor=azure
 @node-attributes fontname=Helvetica
@@ -84,11 +84,11 @@ This section stands for its own.
 <!-- @edge Second Chapter -> First Chapter -->
 # Second Chapter
 And the last chapter is linked with the first chapter.
-```
+~~~
 
 Resulting DOT file:
 
-```DOT
+~~~ DOT
 digraph "MyGraph" {
     bgcolor=azure;
     node [fontname=Helvetica];
@@ -103,11 +103,56 @@ digraph "MyGraph" {
     "Second Chapter" [label="Chapter 2"];
     "Second Chapter" -> "First Chapter";
 }
-```
+~~~
 
 Rendered with `dot` from *GraphViz*:
 
 ![](examples/dotex-example.png)
+
+It is possible to tag DOT commands with a group name to build subsets of commands.
+During the extraction process a group can be selected to build a graph
+with the specified subset of DOT commands.
+
+A DOT command is taged by adding a hash character followed by a group name
+without spaces after the command name.
+
+During the extraction, the command group is specified with the option `group`. 
+
+Example Markdown document:
+
+~~~ Markdown
+# H1
+<!-- @n -->
+The node of this chapter is not tagged.
+
+# H2
+<!-- @n #A -->
+The node  of this chapter is taged with group `A`.
+<!-- @e #A -> H1 -->
+
+# H3
+<!-- @n #B -->
+This node of this chapter is taged with group `B`.
+<!-- @e #B H1 -> H3 --> 
+~~~
+
+Resulting DOT file without a specified group:
+
+~~~ DOT
+digraph G {
+    "H1" [URL="#h1"];
+}
+~~~
+
+Resulting DOT file with group specified as `"A"`:
+
+~~~ DOT
+digraph G {
+    "H1" [URL="#h1"];
+    "H2" [URL="#h2"];
+    "H2" -> "H1";    
+}
+~~~
 
 ## Interface
 
@@ -115,7 +160,7 @@ You can use *MdGraphExtract* in any *Node.JS* project, but it has additional sup
 
 ### Usage with Gulp
 
-```js
+~~~ js
 var gulp = require('gulp');
 var spawn = require('gulp-spawn');
 var mdgraphextract = require('mdgraphextract');
@@ -136,9 +181,9 @@ gulp.task('autograph', function() {
 		// write the PNG files to the docs folder
 		.pipe(gulp.dest('docs/'));
 });
-```
+~~~
 
-### Usage with as a function
+### Usage as a function
 
 Additional to the main function, which processes *Vinyl* files and is usable in *Gulp* files, there is a simple asynchronous `extract()` function.
 
@@ -146,7 +191,7 @@ Additional to the main function, which processes *Vinyl* files and is usable in 
 
 Mini-Example with the `extract()` function:
 
-```js
+~~~ js
 var fs = require('fs');
 var mdgraphextract = require('mdgraphextract');
 
@@ -156,7 +201,7 @@ mdgraphextract.extract(buffer,
     function(result) {
         fs.writeFileSync('test.gv', result, { encoding: 'utf8' });
     });
-```
+~~~
 
 The `extract()` function can take a string, a buffer, or a stream as input. The second argument with the options is optional. The encoding is `utf8` by default. The graph extraction mode is `auto` by default.
 
@@ -168,13 +213,13 @@ At last *MdGraphExtract* provides the pseudo-class `ExtractingStream`.
 
 Mini-Example with the `ExtractingStream` pseudo-class:
 
-```js
+~~~ js
 var fs = require('fs');
 var ExtractingStream = require('mdgraphextract').ExtractingStream;
 
 var s = new ExtractingStream(fs.createReadStream('test.md', 'utf8'));
 s.pipe(fs.createWriteStream('test.gv', 'utf8'));
-```
+~~~
 
 The `ExtractingStream` pseudo-class is constructed with a `Readable` stream as input. The second argument with the options is optional.
 
@@ -183,19 +228,21 @@ The `ExtractingStream` pseudo-class is constructed with a `Readable` stream as i
 The following options are available:
 
 * The `mode` attribute controlles the operational mode of the graph extraction. It can have `"auto"` or `"dotex"` as value.
-* The `encoding` attribute specifying the input encoding, in case the input is binary. 
-* The `autographLevel` attribute is recognized, if the `mode` is set to `auto`, and specifies the headline level to use as the link context. 
+* The `encoding` attribute specifying the input encoding, in case the input is binary.
+* The `group` attribute is recognized, if the `mode` is set to `"dotex"`, and specifies the command group to consider
+* The `autographLevel` attribute is recognized, if the `mode` is set to `"auto"`, and specifies the headline level to use as the link context. 
 * The `noAutoRefs` attribute controlles the automatic generation of URL attributes for nodes from the auto-identifier of the related headline. If it set to `true`, no URL attributes will be auto-generated from the headlines. 
 * The `refPrefix` can be set to a string, which will be prefixing any auto-generated URL attribute.
 
 These are the default values for all options:
 
-```js
+~~~ js
 {
     "mode": "auto",
     "encoding": "utf8",
+    "group": null,
     "autographLevel": null,
     "noAutoRefs": false,
     "refPrefix": ""
 }
-```
+~~~
