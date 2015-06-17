@@ -93,7 +93,8 @@ var formatAttributes = function() {
 var dotex = function(es, opt) {
 	var noAutoRefs = opt.noAutoRefs;
 	var refPrefix = opt.refPrefix || '';
-	var queryGroup = opt.group;
+	var queryGroups = typeof(opt.group) == 'string' ?
+		[ opt.group ] : (opt.group || []);
 
 	var graph = null;
 	var lastHeadline = null;
@@ -147,7 +148,7 @@ var dotex = function(es, opt) {
 		cmd = m[1];
 		cmdGroup = m[2];
 
-		if (cmdGroup && cmdGroup != queryGroup) { return; }
+		if (cmdGroup && queryGroups.indexOf(cmdGroup) < 0) { return; }
 
 		cmdText = m[3] || '';
 		switch(cmd) {

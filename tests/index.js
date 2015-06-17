@@ -338,3 +338,23 @@ test('graphextract.extract() with string: dotex mode, doc_multi_dotex, group A',
 		t.end();
 	});
 });
+
+test('graphextract.extract() with string: dotex mode, doc_multi_dotex, group A/B', function(t) {
+	var text = fs.readFileSync('tests/data/doc_multi_dotex.md', 'utf8');
+	var expected =
+		'digraph G {\n' +
+		'\t"H0";\n' +
+		'\t"H01";\n' +
+		'\t"H1" [URL=\"#h1\"];\n' +
+		'\t"H1" -> "H0";\n' + 
+		'\t"H1" -> "H01";\n' +
+		'\t"SH11" [URL=\"#sh11\"];\n' +
+		'\t"SH11" -> "H1";\n' +
+		'\t"SH_1_2";\n' +
+		'\t"SH_1_2" -> "SH11";\n' +
+		'}\n';
+	graphextract.extract(text, { mode: 'dotex', group: ['A', 'B'] }, function(result) {
+		t.equals(result, expected, 'dot output equals expectation');
+		t.end();
+	});
+});
