@@ -110,13 +110,13 @@ Rendered with `dot` from *GraphViz*:
 ![](examples/dotex-example.png)
 
 It is possible to tag DOT commands with a group name to build subsets of commands.
-During the extraction process a group can be selected to build a graph
+During the extraction process one or more groups can be selected to build a graph
 with the specified subset of DOT commands.
 
 A DOT command is taged by adding a hash character followed by a group name
 without spaces after the command name.
 
-During the extraction, the command group is specified with the option `group`. 
+During the extraction, the command group(s) are specified with the option `group`. 
 
 Example Markdown document:
 
@@ -232,7 +232,7 @@ The following options are available:
 
 * The `mode` attribute controlles the operational mode of the graph extraction. It can have `"auto"` or `"dotex"` as value.
 * The `encoding` attribute specifying the input encoding, in case the input is binary.
-* The `group` attribute is recognized, if the `mode` is set to `"dotex"`, and specifies the command group to consider
+* The `group` attribute is recognized, if the `mode` is set to `"dotex"`, and specifies the command group(s) to consider. Either a string or an array of strings.
 * The `autographLevel` attribute is recognized, if the `mode` is set to `"auto"`, and specifies the headline level to use as the link context. 
 * The `noAutoRefs` attribute controlles the automatic generation of URL attributes for nodes from the auto-identifier of the related headline. If it set to `true`, no URL attributes will be auto-generated from the headlines. 
 * The `refPrefix` can be set to a string, which will be prefixing any auto-generated URL attribute.
