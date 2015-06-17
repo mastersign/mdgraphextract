@@ -1,3 +1,4 @@
+/* global Buffer */
 var through = require('through2');
 var Readable = require('stream').Readable;
 var util = require('util');
@@ -92,18 +93,19 @@ var formatAttributes = function() {
 var dotex = function(es, opt) {
 	var noAutoRefs = opt.noAutoRefs;
 	var refPrefix = opt.refPrefix || '';
+	var queryGroup = opt.group;
 
 	var graph = null;
 	var lastHeadline = null;
 
-	var cmdPattern = /^\s*@([^\s]+)(?:\s+(.*)\s*)?$/;
+	var cmdPattern = /^\s*@(\S+)(?:\s+#(\S+))?(?:\s+(.*)\s*)?$/;
 	var attributesPattern = /^\s*\w+=(?:(?:\"[^\"]*\")|(?:\S+))/;
 	var namePattern = /^(?:([^:<=]*?)\s*)?(?::\s*(.*)\s*)?$/;
 	var nameTypePattern = /^(?:([^:<=]*?)\s*)?(?:<([^>]+)>\s*)?(?::\s*(.*)\s*)?$/;
 	var edgePattern = /^(?:(.*?)\s*)?->\s*([^:<=]*?)\s*(?:<([^>]+)>\s*)?(?::\s*(.*)\s*)?$/;
 
 	var m;
-	var src, cmd, cmdText;
+	var src, cmd, cmdGroup, cmdText;
 	var attributes, typeAttributes, attributesString;
 	var typeName;
 	var nodeName, nodeName2;
@@ -143,7 +145,11 @@ var dotex = function(es, opt) {
 		if (!m) { return; }
 
 		cmd = m[1];
-		cmdText = m[2] || '';
+		cmdGroup = m[2];
+
+		if (cmdGroup && cmdGroup != queryGroup) { return; }
+
+		cmdText = m[3] || '';
 		switch(cmd) {
 		case 'g':
 		case 'graph':
