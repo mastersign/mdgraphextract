@@ -126,14 +126,17 @@ Example Markdown document:
 The node of this chapter is not tagged.
 
 # H2
-<!-- @n #A -->
 The node  of this chapter is taged with group `A`.
+<!-- @n #A -->
+The edge to *H1* is taged with group `A`.
 <!-- @e #A -> H1 -->
 
 # H3
+The node of this chapter is taged with group `B`.
 <!-- @n #B -->
-This node of this chapter is taged with group `B`.
+The edge from *H1* to *H3* is taged with group `B`.
 <!-- @e #B H1 -> H3 --> 
+
 ~~~
 
 Resulting DOT file without a specified group:
