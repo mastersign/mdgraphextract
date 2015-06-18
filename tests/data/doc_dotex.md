@@ -15,7 +15,7 @@
 <!-- @n color=#FFFF00 -->
 <!-- @e -> H1 -->
 
-## SH12
+## SH12 {#sh-1-2}
 <!-- @n <nt1> -->
 <!-- @e -> SH11 <et1> -->
 <!-- @e SH11 -> SH12 <et1>: style=dashed -->
