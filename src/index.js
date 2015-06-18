@@ -99,14 +99,14 @@ var dotex = function(es, opt) {
 	var graph = null;
 	var lastHeadline = null;
 
-	var cmdPattern = /^\s*@(\S+)(?:\s+#(\S+))?(?:\s+(.*)\s*)?$/;
+	var cmdPattern = /^\s*@(\S+)(?:((?:\s+#\S+)+))?(?:\s+(.*)\s*)?$/;
 	var attributesPattern = /^\s*\w+=(?:(?:\"[^\"]*\")|(?:\S+))/;
 	var namePattern = /^(?:([^:<=]*?)\s*)?(?::\s*(.*)\s*)?$/;
 	var nameTypePattern = /^(?:([^:<=]*?)\s*)?(?:<([^>]+)>\s*)?(?::\s*(.*)\s*)?$/;
 	var edgePattern = /^(?:(.*?)\s*)?->\s*([^:<=]*?)\s*(?:<([^>]+)>\s*)?(?::\s*(.*)\s*)?$/;
 
 	var m;
-	var src, cmd, cmdGroup, cmdText;
+	var src, cmd, cmdTags, cmdText;
 	var attributes, typeAttributes, attributesString;
 	var typeName;
 	var nodeName, nodeName2;
@@ -135,6 +135,33 @@ var dotex = function(es, opt) {
 		}
 		cache = [];
 	};
+	
+	var parseTags = function(tagStr) {
+		if (!tagStr) { return []; }
+		var tagPattern = /#(\S+)/g;
+		var tags = [];
+		var result;
+		while ((result = tagPattern.exec(tagStr)) !== null) {
+			tags.push(result[1]);
+		}
+		return tags;
+	};
+	
+	var matchTags = function(tags) {
+		if (tags.length == 0) {
+			return true;
+		}
+		// intersection of queryGroups and tags not empty?
+		var i, j;
+		for (i = 0; i < queryGroups.length; i++) {
+			for (j = 0; j < tags.length; j++) {
+				if (queryGroups[i] == tags[j]) {
+					return true;
+				}
+			}
+		}
+		return false;
+	};
 
 	es._parser.on('headline', function(e) {
 		lastHeadline = e;
@@ -146,9 +173,9 @@ var dotex = function(es, opt) {
 		if (!m) { return; }
 
 		cmd = m[1];
-		cmdGroup = m[2];
+		cmdTags = parseTags(m[2]);
 
-		if (cmdGroup && queryGroups.indexOf(cmdGroup) < 0) { return; }
+		if (!matchTags(cmdTags)) { return; }
 
 		cmdText = m[3] || '';
 		switch(cmd) {

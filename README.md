@@ -109,9 +109,10 @@ Rendered with `dot` from *GraphViz*:
 
 ![](examples/dotex-example.png)
 
-It is possible to tag DOT commands with a group name to build subsets of commands.
+It is possible to tag DOT commands with one or more group tags to build subsets of commands.
 During the extraction process one or more groups can be selected to build a graph
 with the specified subset of DOT commands.
+Commands without a group tag are always selected.
 
 A DOT command is taged by adding a hash character followed by a group name
 without spaces after the command name.
@@ -126,8 +127,8 @@ Example Markdown document:
 The node of this chapter is not tagged.
 
 # H2
-The node  of this chapter is taged with group `A`.
-<!-- @n #A -->
+The node of this chapter is taged with group `A` and group `B`.
+<!-- @n #A #B -->
 The edge to *H1* is taged with group `A`.
 <!-- @e #A -> H1 -->
 
