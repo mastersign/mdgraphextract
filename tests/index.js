@@ -276,6 +276,7 @@ test('graphextract.extract() with string: dotex mode, doc_dotex', function(t) {
 	var expected = 
 		'digraph "Graph" {\n' +
 		'\tcenter=true;\n' +
+		'\trankdir=TB;\n' +
 		'\tnode [color="#00FF00" fillcolor="#0000FF" style=filled];\n' +
 		'\tedge [color="#000000"];\n' + 
 		'\t"H1" [URL="#h1"];\n' +

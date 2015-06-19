@@ -58,6 +58,7 @@ Example Markdown document:
 ~~~ Markdown
 <!-- 
 @graph MyGraph: bgcolor=azure
+@graph-attributes rankdir=TB
 @node-attributes fontname=Helvetica
 @node-attributes shape=rect style="filled, rounded" fillcolor=#A0D0FF
 @edge-attributes color=#2040C0
@@ -91,6 +92,7 @@ Resulting DOT file:
 ~~~ DOT
 digraph "MyGraph" {
     bgcolor=azure;
+    rankdir=TB;
     node [fontname=Helvetica];
     node [fillcolor="#A0D0FF" shape=rect style="filled, rounded"];
     edge [color="#2040C0"];

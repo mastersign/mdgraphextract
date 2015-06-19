@@ -1,5 +1,6 @@
 <!--
 @graph Graph: center=true
+@graph-attributes rankdir=TB
 @node-attributes color=#00FF00 style=filled, fillcolor=#0000FF
 @edge-attributes color=#000000
 @node-type nt1: color=#FF0000

@@ -206,6 +206,15 @@ var dotex = function(es, opt) {
 				}
 			}
 			break;
+		case 'ga':
+		case 'graph-attributes':
+			// @graph-attributes key=value1 key2="value 2"
+				attributes = parseAttributes(cmdText);
+				attributes = parseAttributes(cmdText);
+				for (key in attributes) { 
+					push(formatAttribute(key, attributes[key]));
+				}
+			break;
 		case 'na':
 		case 'node-attributes':
 			// @node-attributes key=value1 key2="value 2"
