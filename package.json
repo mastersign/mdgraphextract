@@ -32,7 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "lodash": "^3.0.0",
-    "mdheadline": "^0.1.0",
+    "mdheadline": "^0.2.0",
     "split-stream": "^0.2.0",
     "through2": "^2.0.0"
   },
