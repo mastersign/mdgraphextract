@@ -1,41 +1,44 @@
 {
   "name": "mdgraphextract",
   "version": "0.1.10",
-  "description": "Extracts graph information from a markdown file.",
+  "description": "extracting graph information from a markdown file",
   "readme": "README.md",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mastersign/mdgraphextract.git"
-  },
+  "repository": "mastersign/mdgraphextract",
   "main": "./src/index.js",
-  "directories": {
-    "test": "tests"
-  },
+  "files": [
+    "src",
+    "test"
+  ],
   "scripts": {
-    "test": "tape ./tests/*.js | tap-spec"
+    "test": "mocha"
   },
   "keywords": [
     "markdown",
     "graph",
     "dot",
     "graphviz",
-    "gulp"
+    "gulpplugin"
   ],
-  "author": "Tobias Kiertscher <dev@mastersign.de>",
+  "author": {
+    "name": "Tobias Kiertscher",
+    "email": "dev@mastersign.de",
+    "url": "http://www.mastersign.de"
+  },
+  "bugs": {
+    "url": "https://github.com/mastersign/mdgraphextract/issues",
+    "email": "dev@mastersign.de"
+  },
+  "homepage": "https://github.com/mastersign/mdgraphextract#readme",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^3.9.3",
+    "lodash": "^3.0.0",
     "split-stream": "^0.2.0",
-    "through2": "^0.6.1",
-    "vinyl": "^0.3.2",
+    "through2": "^2.0.0",
     "xregexp": "^2.0.0"
   },
   "devDependencies": {
-    "glob": "^4.0.5",
-    "gulp": "^3.8.7",
-    "gulp-shell": "^0.2.9",
-    "streamifier": "^0.1.0",
-    "tap-spec": "^0.2.0",
-    "tape": "^2.14.0"
+    "glob": "^4.0.0",
+    "vinyl": "^1.0.0",
+    "streamifier": "^0.1.0"
   }
 }
