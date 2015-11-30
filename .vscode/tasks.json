@@ -1,0 +1,17 @@
+{
+    "version": "0.1.0",
+    "command": "mocha",
+    "isShellCommand": true,
+    "args": [
+        "--no-color"
+    ],
+    "tasks": [
+        {
+            "taskName": "test",
+            "isTestCommand": true,
+            "args": [
+                "test"
+            ]
+        }
+    ]
+}
