@@ -32,9 +32,9 @@
   "license": "MIT",
   "dependencies": {
     "lodash": "^3.0.0",
+    "mdheadline": "^0.1.0",
     "split-stream": "^0.2.0",
-    "through2": "^2.0.0",
-    "xregexp": "^2.0.0"
+    "through2": "^2.0.0"
   },
   "devDependencies": {
     "glob": "^4.0.0",

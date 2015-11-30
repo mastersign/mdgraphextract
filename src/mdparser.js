@@ -1,7 +1,7 @@
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
+var mdheadline = require('mdheadline');
 var lines = require('./lines');
-var panclean = require('./panclean');
 
 var match = function (re, text, fn) {
 	var m;
@@ -226,8 +226,8 @@ var MdParser = function (input, encoding) {
 				column: m.index + 1,
 				level: m[1].length,
 				source: m[2],
-				text: panclean.removeFormat(m[2]),
-				anchor: uniqueAnchor(panclean.anchor(m[2]))
+				text: mdheadline.removeFormat(m[2]),
+				anchor: uniqueAnchor(mdheadline.anchor(m[2]))
 			});
 		}) ||
 		match(headline1Pattern, line, function(m) {
@@ -237,8 +237,8 @@ var MdParser = function (input, encoding) {
 				column: m.index + 1,
 				level: 1,
 				source: lastLine,
-				text: panclean.removeFormat(lastLine),
-				anchor: uniqueAnchor(panclean.anchor(lastLine))
+				text: mdheadline.removeFormat(lastLine),
+				anchor: uniqueAnchor(mdheadline.anchor(lastLine))
 			});
 		}) ||
 		match(headline2Pattern, line, function(m) {
@@ -249,8 +249,8 @@ var MdParser = function (input, encoding) {
 				column: m.index + 1,
 				level: 2,
 				source: lastLine,
-				text: panclean.removeFormat(lastLine),
-				anchor: uniqueAnchor(panclean.anchor(lastLine))
+				text: mdheadline.removeFormat(lastLine),
+				anchor: uniqueAnchor(mdheadline.anchor(lastLine))
 			});
 		});
 
@@ -264,7 +264,7 @@ var MdParser = function (input, encoding) {
 					column: m.index > 0 ? m.index + 2 : m.index + 1,
 					text: m[1],
 					target: m[2],
-					targetText: panclean.removeFormat(m[2])
+					targetText: mdheadline.removeFormat(m[2])
 				});
 			} else {
 				that.emit('internal-link', {
@@ -272,7 +272,7 @@ var MdParser = function (input, encoding) {
 					column: m.index > 0 ? m.index + 2 : m.index + 1,
 					text: m[1],
 					target: m[1],
-					targetText: panclean.removeFormat(m[1])
+					targetText: mdheadline.removeFormat(m[1])
 				});
 			}
 		});
