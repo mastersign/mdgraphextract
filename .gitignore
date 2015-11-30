@@ -1,6 +1,2 @@
-/node_modules
-/tests/data/*.html
-/tests/data/*.gv
-/tests/data/*.png
-/.settings
+node_modules
 *.sublime-workspace
