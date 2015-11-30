@@ -1,20 +1,21 @@
 # MdGraphExtract
 
-Extracts a graph in DOT format from a Markdown file.
+[![npm package][npm-img]][npm-url]
+[![build status][travis-img]][travis-url]
 
-Author: Tobias Kiertscher <dev@mastersign.de>
+> extracting a graph in [DOT] format from a [Markdown] file
 
-License: [MIT License](http://opensource.org/licenses/MIT)
+_MdGraphExtract_ can be used as a [Gulp] plugin.
 
 ## Modes
 
-*MdGraphExtract* has two operational modes:
+_MdGraphExtract_ has two operational modes: Autograph mode and DotExtract mode.
 
 ### Autograph Mode `auto`
 
 Extracts nodes and edges from headlines and internal links.
 
-Example Markdown document:
+Example [Markdown] document:
 
 ~~~ Markdown
 # First Chapter
@@ -30,7 +31,7 @@ This section stands for its own.
 And here is a link to [the first chapter][First Chapter].
 ~~~
 
-Resulting DOT file:
+Resulting [DOT] file:
 
 ~~~ DOT
 digraph G {
@@ -45,15 +46,15 @@ digraph G {
 }
 ~~~
 
-Rendered with `dot` from *GraphViz*:
+Rendered with `dot` from [GraphViz]:
 
 ![](examples/autograph-example.png)
 
 ### DotExtract Mode `dotex`
 
-Extracts DOT commands from HTML-comments under consideration of the last headline.
+Extracts [DOT] commands from HTML-comments under consideration of the last headline.
 
-Example Markdown document:
+Example [Markdown] document:
 
 ~~~ Markdown
 <!-- 
@@ -87,7 +88,7 @@ This section stands for its own.
 And the last chapter is linked with the first chapter.
 ~~~
 
-Resulting DOT file:
+Resulting [DOT] file:
 
 ~~~ DOT
 digraph "MyGraph" {
@@ -107,16 +108,16 @@ digraph "MyGraph" {
 }
 ~~~
 
-Rendered with `dot` from *GraphViz*:
+Rendered with `dot` from [GraphViz]:
 
 ![](examples/dotex-example.png)
 
-It is possible to tag DOT commands with one or more group tags to build subsets of commands.
+It is possible to tag [DOT] commands with one or more group tags to build subsets of commands.
 During the extraction process one or more groups can be selected to build a graph
-with the specified subset of DOT commands.
+with the specified subset of [DOT] commands.
 Commands without a group tag are always selected.
 
-A DOT command is taged by adding a hash character followed by a group name
+A [DOT] command is taged by adding a hash character followed by a group name
 without spaces after the command name.
 
 During the extraction, the command group(s) are specified with the option `group`. 
@@ -145,7 +146,7 @@ The edge from *H1* to *H3* is taged with group `B`.
 
 ~~~
 
-Resulting DOT file without a specified group:
+Resulting [DOT] file without a specified group:
 
 ~~~ DOT
 digraph G {
@@ -153,7 +154,7 @@ digraph G {
 }
 ~~~
 
-Resulting DOT file with group specified as `"A"`:
+Resulting [DOT] file with group specified as `"A"`:
 
 ~~~ DOT
 digraph G {
@@ -165,7 +166,7 @@ digraph G {
 
 ## Interface
 
-You can use *MdGraphExtract* in any *Node.JS* project, but it has additional support for *Gulp*.
+You can use _MdGraphExtract_ in any *Node.JS* project, but it has additional support for *Gulp*.
 
 ### Usage with Gulp
 
@@ -216,7 +217,7 @@ The `extract()` function can take a string, a buffer, or a stream as input. The 
 
 ### Usage as a readable stream
 
-At last *MdGraphExtract* provides the pseudo-class `ExtractingStream`.
+At last _MdGraphExtract_ provides the pseudo-class `ExtractingStream`.
 
 `new ExtractingStream(input[, opt])`
 
@@ -255,3 +256,16 @@ These are the default values for all options:
     "refPrefix": ""
 }
 ~~~
+
+## License
+
+_MdGraphExtract_ is published under the MIT license.
+
+[npm-url]: https://www.npmjs.com/package/mdgraphextract
+[npm-img]: https://img.shields.io/npm/v/mdgraphextract.svg
+[travis-img]: https://img.shields.io/travis/mastersign/mdgraphextract/master.svg
+[travis-url]: https://travis-ci.org/mastersign/mdgraphextract
+[Gulp]: http://gulpjs.com
+[Markdown]: https://daringfireball.net/projects/markdown/
+[GraphViz]: http://www.graphviz.org
+[DOT]: http://www.graphviz.org/content/dot-language
