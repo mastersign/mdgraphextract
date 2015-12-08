@@ -40,6 +40,8 @@ var MdParser = function (input, encoding) {
 	var commentStartPattern = /(?:<!--)(?!.*<!--)(.*?)$/;
 	var commentEndPattern = /^(.*?)-->/;
 
+	var citationPattern = /^ {0,3}(>[\s>]*)(.*)\s*$/;
+
 	var that = this;
 
 	var s = lines(input, encoding);
@@ -76,7 +78,7 @@ var MdParser = function (input, encoding) {
 	s.on('data', function(line) {
 
 		row = row + 1;
-
+		
 		var comments = [];
 		var lastComment = null;
 		var isInComment = function(m) {
@@ -251,6 +253,18 @@ var MdParser = function (input, encoding) {
 				source: lastLine,
 				text: mdheadline.removeFormat(lastLine),
 				anchor: uniqueAnchor(mdheadline.anchor(lastLine))
+			});
+		});
+
+		// citations
+
+		match(citationPattern, line, function (m) {
+			if (isInComment(m)) return;
+			that.emit('citation', {
+				text: m[2],
+				level: m[1].replace(/\s/g, '').length,
+				row: row,
+				column: 1
 			});
 		});
 
