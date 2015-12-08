@@ -376,11 +376,9 @@ describe('mdgraphextract', function() {
 					result += data;
 				});
 				data.contents.on('end', function () {
-					assert.equal(data, expected, 'dot output does not equal expectation');
+					assert.equal(result, expected, 'dot output does not equal expectation');
+					done();
 				});
-			});
-			ge.on('end', function() {
-				done();
 			});
 			ge.write(f);
 			ge.end();
