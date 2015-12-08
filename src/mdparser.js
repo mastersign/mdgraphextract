@@ -22,6 +22,9 @@ var match = function (re, text, fn) {
 };
 
 var MdParser = function (input, encoding) {
+	
+	var yamlHeaderStart = /^---$/;
+	var yamlHeaderEnd = /^-{3}|\.{3}$/;
 
 	var headlinePattern = /^(#+)\s+(.*?)\s*$/;
 	var headline1Pattern = /^==+\s*$/;
@@ -54,6 +57,7 @@ var MdParser = function (input, encoding) {
 
 	var row = 0;
 	var lastLine = null;
+	var inHeader = false;
 	var inCode = false;
 	var inFencedCode = false;
 	var codeFence = null;
@@ -92,9 +96,42 @@ var MdParser = function (input, encoding) {
 			}
 		};
 
+		// header
+
+		if (row === 1) {
+			match(yamlHeaderStart, line, function (m) {
+				inHeader = true;
+				that.emit('startHeader', {
+					row: row + 1,
+					column: 1
+				});
+			});
+			if (inHeader) {
+				lastLine = line;
+				return;
+			}
+		} else if (row > 1 && inHeader) {
+			match(yamlHeaderEnd, line, function (m) {
+				inHeader = false;
+				that.emit('endHeader', {
+					row: row - 1,
+					column: lastLine.length + 1
+				})
+			});
+		}
+		if (inHeader) {
+			that.emit('header', {
+				text: line,
+				row: row,
+				column: 1
+			});
+			lastLine = line;
+			return;
+		}
+
 		// code
 
-		if (!inComment) {
+		if (!inHeader && !inComment) {
 			if (inFencedCode) {
 				if (line === codeFence) {
 					codeFence = null;
