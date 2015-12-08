@@ -222,4 +222,28 @@ describe('MdParser', function () {
 		p.resume();
 	});
 
+	it('header', function(done) {
+		var expected = [
+			{ typ: 'start', row: 2, column: 1 },
+			{ text: '# a comment', row: 2, column: 1 },
+			{ text: 'author: John Smith', row: 3, column: 1},
+			{ text: 'date: 2015-12-08', row: 4, column: 1 },
+			{ text: 'tags:', row: 5, column: 1 },
+			{ text: ' - Tag 1', row: 6, column: 1 },
+			{ text: ' - Tag 2', row: 7, column: 1 },
+			{ typ: 'end', row: 7, column: 9 }
+		];
+
+		var p = new MdParser(fs.createReadStream('test/data/yaml-header.md'));
+		var result = [];
+		p.on('startHeader', function(h) { h.typ = 'start'; result.push(h); });
+		p.on('header', function(h) { result.push(h); });
+		p.on('endHeader', function(h) { h.typ = 'end'; result.push(h); });
+		p.on('end', function() {
+			checkObjectArray(result, expected);
+			done();
+		});
+		p.resume();
+	});
+	
 });
