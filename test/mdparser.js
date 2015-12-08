@@ -6,13 +6,9 @@ var fs = require('fs');
 var MdParser = require('../src/mdparser');
 
 var checkObjectArray = function(result, expected) {
-	var i;
 	assert(result, 'result should be truthy');
 	assert(result instanceof Array, 'result should be an array');
-	assert.equal(result.length, expected.length, 'result has the right length');
-	for (i = 0; i < expected.length; i++) {
-		assert.deepEqual(result[i], expected[i], 'array item should be equal');
-	}
+	assert.deepEqual(result, expected, 'result does not match expected data');
 };
 
 describe('MdParser', function () {
@@ -195,6 +191,30 @@ describe('MdParser', function () {
 		p.on('comment', function(hl) { result.push(hl); });
 		p.on('startComment', function(e) { e.typ = 'start'; result.push(e); });
 		p.on('endComment', function(e) { e.typ = 'end'; result.push(e); });
+		p.on('end', function() {
+			checkObjectArray(result, expected);
+			done();
+		});
+		p.resume();
+	});
+
+	it('citations', function(done) {
+		var expected = [
+			{ text: 'This is a single line citation.', level: 1, row: 3, column: 1},
+			{ text: 'One citation paragraph.', level: 1, row: 7, column: 1 },
+			{ text: 'Another citation paragraph,', level: 1, row: 9, column: 1 },
+			{ text: 'with a second line.', level: 1, row: 10, column: 1 },
+			{ text: 'Quote', level: 1, row: 14, column: 1 },
+			{ text: 'without whitespace.', level: 1, row: 15, column: 1 },
+			{ text: 'This is double quoted', level: 2, row: 19, column: 1 },
+			{ text: 'with two lines in the paragraph.', level: 2, row: 20, column: 1 },
+			{ text: 'This is triple quoted', level: 3, row: 24, column: 1 },
+			{ text: 'with two lines in the paragraph.', level: 3, row: 25, column: 1 }
+		];
+	
+		var p = new MdParser(fs.createReadStream('test/data/citations.md'));
+		var result = [];
+		p.on('citation', function(cite) { result.push(cite); });
 		p.on('end', function() {
 			checkObjectArray(result, expected);
 			done();
