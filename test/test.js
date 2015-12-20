@@ -14,6 +14,7 @@ describe('mdgraphextract', function() {
     var autographExampleFile = 'test/data/doc_autograph.md';
     var dotexExampleFile = 'test/data/doc_dotex.md';
     var multiDotexExampleFile = 'test/data/doc_multi_dotex.md';
+    var yamlHeaderExampleFile = 'test/data/yaml-header.md';
 
     var autographResult =
         'digraph G {\n' +
@@ -33,6 +34,14 @@ describe('mdgraphextract', function() {
         '\t"Subßection A" -> "2 Headline";\n' +
         '\t"Subsection B" [URL="target.html#subsection-b"];\n' +
         '\t"Subsection B" -> "1 Hädline";\n' +
+        '}\n';
+
+    var yamlHeaderResult = 
+        'digraph G {\n' +
+        '\t"Headline 1";\n' +
+        '\t"Headline 1" -> "Headline 2";\n' +
+        '\t"Headline 2";\n' +
+        '\t"Headline 2" -> "Headline 1";\n' +
         '}\n';
 
     describe('ExtractingStream', function () {
@@ -101,6 +110,15 @@ describe('mdgraphextract', function() {
                     assert.equal(result, expected, 'dot output does not equal expectation');
                     done();
                 });
+            });
+
+            it('autograph mode with YAML header', function (done) {
+               var text = fs.readFileSync(yamlHeaderExampleFile, 'utf8');
+               var expected = yamlHeaderResult;
+               graphextract.extract(text, { noAutoRefs: true }, function (result) {
+                   assert.equal(result, expected, 'dot output does not equal expectation');
+                   done();
+               });
             });
 
             it('dotex mode, empty named graph', function (done) {
