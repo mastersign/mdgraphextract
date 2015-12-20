@@ -110,7 +110,7 @@ var MdParser = function (input, encoding) {
 				lastLine = line;
 				return;
 			}
-		} else if (row > 1 && inHeader) {
+		} else if (inHeader) {
 			match(yamlHeaderEnd, line, function (m) {
 				inHeader = false;
 				that.emit('endHeader', {
@@ -118,13 +118,13 @@ var MdParser = function (input, encoding) {
 					column: lastLine.length + 1
 				})
 			});
-		}
-		if (inHeader) {
-			that.emit('header', {
-				text: line,
-				row: row,
-				column: 1
-			});
+			if (inHeader) {
+				that.emit('header', {
+					text: line,
+					row: row,
+					column: 1
+				});
+			}
 			lastLine = line;
 			return;
 		}
@@ -271,6 +271,7 @@ var MdParser = function (input, encoding) {
 		}) ||
 		match(headline1Pattern, line, function(m) {
 			if (isInComment(m)) return;
+			if (!lastLine || lastLine.trim() === '') return;
 			that.emit('headline', {
 				row: row - 1, 
 				column: m.index + 1,
@@ -283,6 +284,7 @@ var MdParser = function (input, encoding) {
 		match(headline2Pattern, line, function(m) {
 			if (isInComment(m)) return;
 			if (row === 1) return;
+			if (!lastLine || lastLine.trim() === '') return;
 			that.emit('headline', {
 				row: row - 1, 
 				column: m.index + 1,
