@@ -1,7 +1,7 @@
 ---
 title: test document
 author: my self
-...
+---
 
 Preamble ...
 
@@ -35,3 +35,7 @@ Some Text
 ## Subsection
 
 ## Subsection
+
+---
+
+===
