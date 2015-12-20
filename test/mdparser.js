@@ -71,6 +71,29 @@ describe('MdParser', function () {
 		p.resume();
 	});
 	
+	it ('headlines with YAML header', function (done) {
+		var expected = [
+			{ source: 'Headline 1',
+			text: 'Headline 1',
+			anchor: 'headline-1',
+			level: 1,
+			row: 15, column: 1 },
+			{ source: 'Headline 2',
+			text: 'Headline 2',
+			anchor: 'headline-2',
+			level: 1,
+			row: 21, column: 1 }
+		];
+		var p = new MdParser(fs.createReadStream('test/data/yaml-header.md'));
+		var result = [];
+		p.on('headline', function (hl) { result.push(hl); });
+		p.on('end', function () {
+			checkObjectArray(result, expected);
+			done();
+		});
+		p.resume();
+	});
+	
 	it('internal links', function(done) {
 		var expected = [
 			{ target: 'Headline', targetText: 'Headline', text: 'First Headline', row: 3, column: 1 },
@@ -231,7 +254,8 @@ describe('MdParser', function () {
 			{ text: 'tags:', row: 5, column: 1 },
 			{ text: ' - Tag 1', row: 6, column: 1 },
 			{ text: ' - Tag 2', row: 7, column: 1 },
-			{ typ: 'end', row: 7, column: 9 }
+			{ text: 'lang: en', row: 8, column: 1 },
+			{ typ: 'end', row: 8, column: 9 }
 		];
 
 		var p = new MdParser(fs.createReadStream('test/data/yaml-header.md'));
