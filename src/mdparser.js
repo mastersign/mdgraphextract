@@ -1,3 +1,5 @@
+/* globals require */
+
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var mdheadline = require('mdheadline');
@@ -22,7 +24,7 @@ var match = function (re, text, fn) {
 };
 
 var MdParser = function (input, encoding) {
-	
+
 	var yamlHeaderStart = /^---$/;
 	var yamlHeaderEnd = /^-{3}|\.{3}$/;
 
@@ -30,10 +32,12 @@ var MdParser = function (input, encoding) {
 	var headline1Pattern = /^==+\s*$/;
 	var headline2Pattern = /^--+\s*$/;
 
-	var internalLinkPattern = /(?:^|[^\]\)!])\[([^\]]+)\](?:\[([^\]]*)\])?/g;
+	var internalLinkPattern = /(?:^|[^\]\)!])\[([^\]]+)\](?: ?\[([^\]]*)\])?/g;
 
 	var externalLinkPattern = /(?:^|[^\]!])\[([^\]]+)\]\(([^\)]+)\)/g;
 	var urlLinkPattern = /<([^>\s]+)>/g;
+
+	var referencePattern = /^\[([^\]]+)\]:\s+(\S+)(?:\s+"([^"]*)")?\s*$/g;
 
 	var codePattern = /^(?: {4}|\t)(.*)$/;
 	var fencedCodeStartPattern = /^(`{3,}|~{3,})\s*(.*?)\s*$/;
@@ -48,6 +52,7 @@ var MdParser = function (input, encoding) {
 	var that = this;
 
 	var s = lines(input, encoding);
+
 	s.pause();
 	if (s === undefined) {
 		throw 'Invalid input.';
@@ -82,7 +87,7 @@ var MdParser = function (input, encoding) {
 	s.on('data', function(line) {
 
 		row = row + 1;
-		
+
 		var comments = [];
 		var lastComment = null;
 		var isInComment = function(m) {
@@ -116,7 +121,7 @@ var MdParser = function (input, encoding) {
 				that.emit('endHeader', {
 					row: row - 1,
 					column: lastLine.length + 1
-				})
+				});
 			});
 			if (inHeader) {
 				that.emit('header', {
@@ -154,12 +159,12 @@ var MdParser = function (input, encoding) {
 					if (!inCode && lastLine.trim().length === 0 && m[1].length > 0) {
 						inCode = true;
 						that.emit('startCode', {
-							row: row, 
+							row: row,
 							column: 1
 						});
 					}
 					if (inCode) {
-						that.emit('code', { 
+						that.emit('code', {
 							row: row,
 							column: 1,
 							text: m[1]
@@ -168,13 +173,13 @@ var MdParser = function (input, encoding) {
 				}) > 0) {
 					if (inCode) {
 						lastLine = line;
-						return; 
+						return;
 					}
 				}
 				if (inCode) {
 					inCode = false;
-					that.emit('endCode', { 
-						row: row - 1, 
+					that.emit('endCode', {
+						row: row - 1,
 						column: lastLine.length + 1
 					});
 				}
@@ -209,7 +214,7 @@ var MdParser = function (input, encoding) {
 					});
 				}
 				inComment = false;
-				that.emit('endComment', { 
+				that.emit('endComment', {
 					row: row,
 					column: m.index + m[0].length + 1,
 				});
@@ -260,8 +265,8 @@ var MdParser = function (input, encoding) {
 
 		match(headlinePattern, line, function(m) {
 			if (isInComment(m)) return;
-			that.emit('headline', { 
-				row: row, 
+			that.emit('headline', {
+				row: row,
 				column: m.index + 1,
 				level: m[1].length,
 				source: m[2],
@@ -273,7 +278,7 @@ var MdParser = function (input, encoding) {
 			if (isInComment(m)) return;
 			if (!lastLine || lastLine.trim() === '') return;
 			that.emit('headline', {
-				row: row - 1, 
+				row: row - 1,
 				column: m.index + 1,
 				level: 1,
 				source: lastLine,
@@ -286,7 +291,7 @@ var MdParser = function (input, encoding) {
 			if (row === 1) return;
 			if (!lastLine || lastLine.trim() === '') return;
 			that.emit('headline', {
-				row: row - 1, 
+				row: row - 1,
 				column: m.index + 1,
 				level: 2,
 				source: lastLine,
@@ -313,7 +318,7 @@ var MdParser = function (input, encoding) {
 			if (isInComment(m)) return;
 			if (m[2]) {
 				that.emit('internal-link', {
-					row: row, 
+					row: row,
 					column: m.index > 0 ? m.index + 2 : m.index + 1,
 					text: m[1],
 					target: m[2],
@@ -321,7 +326,7 @@ var MdParser = function (input, encoding) {
 				});
 			} else {
 				that.emit('internal-link', {
-					row: row, 
+					row: row,
 					column: m.index > 0 ? m.index + 2 : m.index + 1,
 					text: m[1],
 					target: m[1],
@@ -330,12 +335,25 @@ var MdParser = function (input, encoding) {
 			}
 		});
 
+		// external reference
+
+		match(referencePattern, line, function(m) {
+			if (isInComment(m)) return;
+			that.emit('reference', {
+				row: row,
+				column: 1,
+				label: m[1],
+				href: m[2],
+				text: m[3]
+			});
+		});
+
 		// external links
 
 		match(externalLinkPattern, line, function(m) {
 			if (isInComment(m)) return;
 			that.emit('link', {
-				row: row, 
+				row: row,
 				column: m.index > 0 ? m.index + 2 : m.index + 1,
 				text: m[1],
 				url: m[2]
@@ -345,7 +363,7 @@ var MdParser = function (input, encoding) {
 		match(urlLinkPattern, line, function(m) {
 			if (isInComment(m)) return;
 			that.emit('link', {
-				row: row, 
+				row: row,
 				column: m.index + 1,
 				text: m[1],
 				url: m[1]
