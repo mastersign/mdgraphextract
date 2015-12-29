@@ -144,6 +144,7 @@ describe('mdgraphextract', function() {
                     '\t"2 Headline";\n' +
                     '\t"Subßection A";\n' +
                     '\t"Subsection B";\n' +
+                    '\t"3 Isolated";\n' +
                     '\t"1 Hädline" -> "Subßection A";\n' +
                     '\t"1 Hädline" -> "Subsection B";\n' +
                     '\t"Subßection A" -> "2 Headline";\n' +

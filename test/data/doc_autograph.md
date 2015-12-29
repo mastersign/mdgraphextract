@@ -38,3 +38,7 @@ And a link to [nowhere].
 
 [ExtLink]: http://localhost/ "The Label of the link"
 [Unused]: http://unused.com
+
+# 3 Isolated
+
+Disconnected chapter.
