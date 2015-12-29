@@ -28,13 +28,6 @@ describe('mdgraphextract', function() {
         '\t"Subsection B" -> "Subßection A";\n' +
         '}\n';
 
-    var autographResult3 =
-        'digraph G {\n' +
-        '\t"Subßection A";\n' +
-        '\t"Subsection B";\n' +
-        '\t"Subsection B" -> "Subßection A";\n' +
-        '}\n';
-
     var yamlHeaderResult =
         'digraph G {\n' +
         '\t"Headline 1";\n' +
