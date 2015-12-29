@@ -82,7 +82,7 @@ var autograph = function (es, opt) {
 			.value();
 		var usedNodeLabels = _(selectedEdges)
 				.map(function (e) { return e.from; })
-				.concat(_(selectedEdges).map(function (e) { return e.to; }))
+				.concat(_.map(selectedEdges, function (e) { return e.to; }))
 				.uniq()
 				.value();
 		var selectedNodes = _.filter(nodes, function (n) {
