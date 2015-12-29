@@ -5,10 +5,7 @@
   "readme": "README.md",
   "repository": "mastersign/mdgraphextract",
   "main": "./src/index.js",
-  "files": [
-    "src",
-    "test"
-  ],
+  "files": ["src"],
   "scripts": {
     "test": "mocha"
   },
