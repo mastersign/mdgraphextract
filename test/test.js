@@ -19,6 +19,7 @@ describe('mdgraphextract', function() {
     var autographResult =
         'digraph G {\n' +
         '\t"1 Hädline";\n' +
+        '\t"2 Headline";\n' +
         '\t"Subßection A";\n' +
         '\t"Subsection B";\n' +
         '\t"1 Hädline" -> "Subßection A";\n' +
@@ -100,6 +101,7 @@ describe('mdgraphextract', function() {
                 var expected =
                     'digraph G {\n' +
                     '\t"1 Hädline" [URL="#hädline"];\n' +
+                    '\t"2 Headline" [URL="#headline"];\n' +
                     '\t"Subßection A" [URL="#subßection-a"];\n' +
                     '\t"Subsection B" [URL="#subsection-b"];\n' +
                     '\t"1 Hädline" -> "Subßection A";\n' +
@@ -119,6 +121,7 @@ describe('mdgraphextract', function() {
                 var expected =
                     'digraph G {\n' +
                     '\t"1 Hädline" [URL="target.html#hädline"];\n' +
+                    '\t"2 Headline" [URL="target.html#headline"];\n' +
                     '\t"Subßection A" [URL="target.html#subßection-a"];\n' +
                     '\t"Subsection B" [URL="target.html#subsection-b"];\n' +
                     '\t"1 Hädline" -> "Subßection A";\n' +
@@ -158,6 +161,7 @@ describe('mdgraphextract', function() {
                 var expected =
                     'digraph G {\n' +
                     '\t"1 Hädline";\n' +
+                    '\t"2 Headline";\n' +
                     '\t"Subßection A";\n' +
                     '\t"Subsection B";\n' +
                     '\t"1 Hädline" -> "Subßection A";\n' +
@@ -178,6 +182,7 @@ describe('mdgraphextract', function() {
                 var expected =
                     'digraph G {\n' +
                     '\t"1 Hädline";\n' +
+                    '\t"2 Headline";\n' +
                     '\t"Subßection A";\n' +
                     '\t"Subsection B";\n' +
                     '\t"1 Hädline" -> "Subßection A";\n' +
