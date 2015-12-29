@@ -12,6 +12,14 @@
 <!-- @node -->
 <!-- @edge H1 -> SH12: color=#FF0000 -->
 
+```html
+<!--
+@node Ignore <this>
+@node Ignore 2
+-->
+<!-- @edge Ignore -> Ignore 2 -->
+```
+
 ## SH11
 <!-- @n color=#FFFF00 -->
 <!-- @e -> H1 -->
