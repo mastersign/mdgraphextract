@@ -24,6 +24,7 @@
   "author": "Tobias Kiertscher <dev@mastersign.de>",
   "license": "MIT",
   "dependencies": {
+    "lodash": "^3.9.3",
     "split-stream": "^0.2.0",
     "through2": "^0.6.1",
     "vinyl": "^0.3.2",

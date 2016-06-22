@@ -1,8 +1,9 @@
-/* global Buffer */
+/* global Buffer, _ */
 var through = require('through2');
 var Readable = require('stream').Readable;
 var util = require('util');
 var path = require('path');
+var _ = require('lodash');
 
 var MdParser = require('./mdparser');
 
@@ -115,6 +116,8 @@ var dotex = function(es, opt) {
 	var edgeTypes = {};
 
 	var cache = [];
+	var nodes = [];
+	var edges = [];
 
 	var push = function(content) {
 		if (graph) {
@@ -126,7 +129,7 @@ var dotex = function(es, opt) {
 			cache.push(content);
 		}
 	};
-
+	
 	var flushCache = function() {
 		var i;
 		if (graph === null) return;
@@ -134,6 +137,30 @@ var dotex = function(es, opt) {
 			es.push('\t' + cache[i] + ';\n');
 		}
 		cache = [];
+	};
+
+	var storeNode = function(name, tags, attrStr) {
+		var node = { name: name, tags: tags, attrStr: attrStr};
+		nodes.push(node);
+	};
+
+	var storeEdge = function(fromName, toName, attrStr) {
+		var edge = { from: fromName, to: toName, attrStr: attrStr};
+		edges.push(edge);
+	};
+
+	var pushNode = function(node) {
+		push('"' + node.name + '"' + 
+			(node.attrStr ?
+			 ' [' + node.attrStr + ']' :
+			 ''));
+	};
+	
+	var pushEdge = function(edge) {
+		push('"' + edge.from + '" -> "' + edge.to + '"' + 
+			(edge.attrStr ?
+			 ' [' + edge.attrStr + ']' :
+			 ''));
 	};
 	
 	var parseTags = function(tagStr) {
@@ -147,20 +174,32 @@ var dotex = function(es, opt) {
 		return tags;
 	};
 	
+	var isIntersectionEmpty = function(a, b) {
+		return !_.find(a, function(item) { return _.includes(b, item); });
+	};
+
 	var matchTags = function(tags) {
 		if (tags.length == 0) {
 			return true;
 		}
-		// intersection of queryGroups and tags not empty?
-		var i, j;
-		for (i = 0; i < queryGroups.length; i++) {
-			for (j = 0; j < tags.length; j++) {
-				if (queryGroups[i] == tags[j]) {
-					return true;
-				}
+		return !isIntersectionEmpty(queryGroups, tags);
+	};
+	
+	var isNodeReferencedByAnEdge = function(name) {
+		return _.some(edges, function(edge) {
+			return edge.from === name || edge.to === name;
+		});
+	};
+
+	var pushNodesAndEdges = function() {
+		_.forEach(nodes, function(node) {
+			if (matchTags(node.tags) || 
+				isNodeReferencedByAnEdge(node.name)) {
+				
+				pushNode(node);
 			}
-		}
-		return false;
+		})
+		_.forEach(edges, pushEdge);
 	};
 
 	es._parser.on('headline', function(e) {
@@ -175,7 +214,12 @@ var dotex = function(es, opt) {
 		cmd = m[1];
 		cmdTags = parseTags(m[2]);
 
-		if (!matchTags(cmdTags)) { return; }
+		if (cmd !== 'n' && cmd !== 'node'  &&
+			!matchTags(cmdTags)) {
+			// nodes are stored, even if the tags do not match,
+			// to be available if they are referenced by an edge 
+			return;
+		}
 
 		cmdText = m[3] || '';
 		switch(cmd) {
@@ -276,10 +320,7 @@ var dotex = function(es, opt) {
 					attributes.URL = refPrefix + '#' + lastHeadline.anchor;
 				}
 				attributesString = formatAttributes(attributes);
-				push('"' + nodeName + '"' + 
-					(attributesString ?
-					 ' [' + attributesString + ']' :
-					 ''));
+				storeNode(nodeName, cmdTags, attributesString);
 				return;
 			}
 			// @node
@@ -303,10 +344,7 @@ var dotex = function(es, opt) {
 				}
 				attributesString = formatAttributes(
 					typeAttributes, attributes);
-				push('"' + nodeName + '"' + 
-					(attributesString ?
-						' [' + attributesString + ']' :
-					 	''));
+				storeNode(nodeName, cmdTags, attributesString);
 			}
 			break;
 		case 'e':
@@ -328,10 +366,7 @@ var dotex = function(es, opt) {
 				attributes = parseAttributes(m[4]);
 				attributesString = formatAttributes(
 					typeAttributes, attributes);
-				push('"' + nodeName + '" -> "' + nodeName2 + '"' + 
-					(attributesString ?
-						' [' + attributesString + ']' :
-						''));
+				storeEdge(nodeName, nodeName2, attributesString);
 			}
 			break;
 		}
@@ -342,6 +377,7 @@ var dotex = function(es, opt) {
 			graph = 'G';
 			flushCache();
 		}
+		pushNodesAndEdges();
 		es.push('}\n');
 		es.push(null);
 	});

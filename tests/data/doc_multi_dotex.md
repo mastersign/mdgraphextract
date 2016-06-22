@@ -7,7 +7,7 @@
 <!-- @edge #b -> H01 -->
 
 ## SH11
-<!-- @n #alpha <typ_1> -->
+<!-- @n #gamma <typ_1> -->
 <!-- @e #alpha -> H1 -->
 
 ## SH12 {#head-1-2}

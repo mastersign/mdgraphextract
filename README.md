@@ -97,12 +97,12 @@ digraph "MyGraph" {
     node [fillcolor="#A0D0FF" shape=rect style="filled, rounded"];
     edge [color="#2040C0"];
     "First Chapter" [URL="#first-chapter"];
-    "First Chapter" -> "Section 1.1" [style=dashed];
-    "First Chapter" -> "Section 1.2" [style=dashed];
     "Section 1.1" [fillcolor="#FFD0A0" label="Sect. (1.1)" URL="#section-1.1"];
-    "Section 1.1" -> "Second Chapter";
     "Section 1.2" [label="Sect. (1.2)" URL="#section-1.2"];
     "Second Chapter" [label="Chapter 2"];
+    "First Chapter" -> "Section 1.1" [style=dashed];
+    "First Chapter" -> "Section 1.2" [style=dashed];
+    "Section 1.1" -> "Second Chapter";
     "Second Chapter" -> "First Chapter";
 }
 ~~~
@@ -120,6 +120,9 @@ A DOT command is taged by adding a hash character followed by a group name
 without spaces after the command name.
 
 During the extraction, the command group(s) are specified with the option `group`. 
+
+If an edge is selected by the group(s), the two referenced nodes are
+selected too, despite thier group tags.
 
 Example Markdown document:
 
