@@ -280,10 +280,10 @@ test('graphextract.extract() with string: dotex mode, doc_dotex', function(t) {
 		'\tnode [color="#00FF00" fillcolor="#0000FF" style=filled];\n' +
 		'\tedge [color="#000000"];\n' + 
 		'\t"H1" [URL="#h1"];\n' +
-		'\t"H1" -> "SH12" [color="#FF0000"];\n' +
 		'\t"SH11" [color="#FFFF00" URL="#sh11"];\n' +
-		'\t"SH11" -> "H1";\n' +
 		'\t"SH12" [color="#FF0000" URL="#sh-1-2"];\n' +
+		'\t"H1" -> "SH12" [color="#FF0000"];\n' +
+		'\t"SH11" -> "H1";\n' +
 		'\t"SH12" -> "SH11" [color="#00FFFF"];\n' +
 		'\t"SH11" -> "SH12" [color="#00FFFF" style=dashed];\n' +
 		'}\n';
@@ -322,16 +322,30 @@ test('graphextract.extract() with string: dotex mode, doc_multi_dotex', function
 	});
 });
 
-test('graphextract.extract() with string: dotex mode, doc_multi_dotex, group alpha', function(t) {
+test('graphextract.extract() with string: dotex mode, doc_multi_dotex, group []', function(t) {
 	var text = fs.readFileSync('tests/data/doc_multi_dotex.md', 'utf8');
 	var expected =
 		'digraph G {\n' +
 		'\t"H0";\n' +
 		'\t"H1" [URL=\"#h1\"];\n' +
 		'\t"H1" -> "H0";\n' + 
+		'}\n';
+	graphextract.extract(text, { mode: 'dotex', group: null }, function(result) {
+		t.equals(result, expected, 'dot output equals expectation');
+		t.end();
+	});
+});
+
+test('graphextract.extract() with string: dotex mode, doc_multi_dotex, group [alpha]', function(t) {
+	var text = fs.readFileSync('tests/data/doc_multi_dotex.md', 'utf8');
+	var expected =
+		'digraph G {\n' +
+		'\t"H0";\n' +
+		'\t"H1" [URL=\"#h1\"];\n' +
 		'\t"SH11" [URL=\"#sh11\"];\n' +
-		'\t"SH11" -> "H1";\n' +
 		'\t"SH_1_2" [href=\"#head-1-2\"];\n' +
+		'\t"H1" -> "H0";\n' + 
+		'\t"SH11" -> "H1";\n' +
 		'\t"SH_1_2" -> "SH11";\n' +
 		'}\n';
 	graphextract.extract(text, { mode: 'dotex', group: 'alpha' }, function(result) {
@@ -340,18 +354,18 @@ test('graphextract.extract() with string: dotex mode, doc_multi_dotex, group alp
 	});
 });
 
-test('graphextract.extract() with string: dotex mode, doc_multi_dotex, group alpha/b', function(t) {
+test('graphextract.extract() with string: dotex mode, doc_multi_dotex, group [alpha, b]', function(t) {
 	var text = fs.readFileSync('tests/data/doc_multi_dotex.md', 'utf8');
 	var expected =
 		'digraph G {\n' +
 		'\t"H0";\n' +
 		'\t"H01";\n' +
 		'\t"H1" [URL=\"#h1\"];\n' +
+		'\t"SH11" [URL=\"#sh11\"];\n' +
+		'\t"SH_1_2" [href=\"#head-1-2\"];\n' +
 		'\t"H1" -> "H0";\n' + 
 		'\t"H1" -> "H01";\n' +
-		'\t"SH11" [URL=\"#sh11\"];\n' +
 		'\t"SH11" -> "H1";\n' +
-		'\t"SH_1_2" [href=\"#head-1-2\"];\n' +
 		'\t"SH_1_2" -> "SH11";\n' +
 		'}\n';
 	graphextract.extract(text, { mode: 'dotex', group: ['alpha', 'b'] }, function(result) {
