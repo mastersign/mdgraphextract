@@ -33,8 +33,10 @@ var lines = function(input, encoding) {
 		return new TextSplitter(input);
 	} else if (input instanceof Buffer) {
 		return new TextSplitter(input.toString(encoding));
-	} else if (input instanceof Readable) {
-		input.setEncoding(encoding);
+	} else if (typeof(input.pipe) === 'function') {
+		if (typeof(input.setEncoding) === 'function') {
+			input.setEncoding(encoding);
+		}
 		return input.pipe(split.create());
 	} else {
 		throw 'Input not supported.';
