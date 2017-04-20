@@ -1,6 +1,7 @@
 # MdGraphExtract
 
 [![npm package][npm-img]][npm-url]
+[![dependency status][libraries-img]][libraries-url]
 [![build status][travis-img]][travis-url]
 
 > extracting a graph in [DOT] format from a [Markdown] file
@@ -269,6 +270,8 @@ _MdGraphExtract_ is published under the MIT license.
 
 [npm-url]: https://www.npmjs.com/package/mdgraphextract
 [npm-img]: https://img.shields.io/npm/v/mdgraphextract.svg
+[libraries-url]: https://libraries.io/npm/mdgraphextract
+[libraries-img]: https://img.shields.io/librariesio/github/mastersign/mdgraphextract.svg
 [travis-img]: https://img.shields.io/travis/mastersign/mdgraphextract/master.svg
 [travis-url]: https://travis-ci.org/mastersign/mdgraphextract
 [Gulp]: http://gulpjs.com
