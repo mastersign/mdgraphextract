@@ -36,6 +36,7 @@
   "devDependencies": {
     "glob": "^7.0.0",
     "vinyl": "^2.0.0",
-    "streamifier": "^0.1.0"
+    "streamifier": "^0.1.0",
+    "mocha": "*"
   }
 }
