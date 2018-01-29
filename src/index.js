@@ -15,6 +15,7 @@ var includes = function (haystack, needle) {
 
 var autograph = function (es, opt) {
 	var node = null;
+	var label = null;
 	var level = opt.autographLevel;
 	var strictLevel = !!opt.autographLevelStrict;
 	var refPrefix = opt.refPrefix || '';
@@ -35,19 +36,35 @@ var autograph = function (es, opt) {
 				return;
 			}
 		}
-		var attributes = '';
-		if (!noAutoRefs) {
-			attributes = ' [URL="';
-			if (refPrefix) {
-				attributes = attributes + refPrefix;
-			}
-			attributes = attributes + '#' + e.anchor + '"]';
-		}
 		node = e.text;
+		label = null;
+		var attributes = [];
+		if (opt.levelFormat) {
+			if (e.level === 1) {
+				label = '<B>' + node + '</B>';
+			} else if (e.level === 2) {
+				label = '<I>' + node + '</I>';
+			}
+			if (label) {
+				attributes.push('label=<' + label + '>');
+			}
+		}
+		if (!noAutoRefs) {
+			var urlAttribute = 'URL="';
+			if (refPrefix) {
+				urlAttribute += refPrefix;
+			}
+			urlAttribute += '#' + e.anchor + '"';
+			attributes.push(urlAttribute);
+		}
+		var attributeStr = '';
+		if (attributes.length > 0) {
+			attributeStr = ' [' + attributes.join(', ') + ']';
+		}
 		nodes.push({
 			label: node,
 			skip: skip,
-			dot: '\t"' + node + '"' + attributes + ';\n'
+			dot: '\t"' + node + '"' + attributeStr + ';\n'
 		 });
 	});
 	es._parser.on('internal-link', function (e) {
