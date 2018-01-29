@@ -5,7 +5,9 @@
   "readme": "README.md",
   "repository": "mastersign/mdgraphextract",
   "main": "./src/index.js",
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "scripts": {
     "test": "mocha"
   },
@@ -35,8 +37,8 @@
   },
   "devDependencies": {
     "glob": "^7.0.0",
-    "vinyl": "^2.0.0",
+    "mocha": "*",
     "streamifier": "^0.1.0",
-    "mocha": "*"
+    "vinyl": "^2.0.0"
   }
 }
