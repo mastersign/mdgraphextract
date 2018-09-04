@@ -197,6 +197,8 @@ var dotex = function (es, opt) {
 	var nodes = [];
 	var edges = [];
 
+	var currentTags = [];
+
 	var push = function (content) {
 		if (graph) {
 			if (cache.length > 0) {
@@ -283,6 +285,9 @@ var dotex = function (es, opt) {
 	es._parser.on('headline', function (e) {
 		lastHeadline = e;
 	});
+	es._parser.on('endComment', function (e) {
+		currentTags = [];
+	});
 	es._parser.on('comment', function (e) {
 		var key;
 		src = e.text.trim();
@@ -290,7 +295,12 @@ var dotex = function (es, opt) {
 		if (!m) { return; }
 
 		cmd = m[1];
-		cmdTags = parseTags(m[2]);
+		if (cmd === 't' || cmd === 'tags') {
+			currentTags = parseTags(m[2]);
+			return;
+		} else {
+			cmdTags = currentTags.concat(parseTags(m[2]));
+		}
 
 		if (cmd !== 'n' && cmd !== 'node'  &&
 			!matchTags(cmdTags)) {

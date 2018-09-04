@@ -14,6 +14,7 @@ describe('mdgraphextract', function() {
     var autographExampleFile = 'test/data/doc_autograph.md';
     var dotexExampleFile = 'test/data/doc_dotex.md';
     var multiDotexExampleFile = 'test/data/doc_multi_dotex.md';
+    var multiDotexExampleFile2 = 'test/data/doc_multi_dotex_2.md';
     var yamlHeaderExampleFile = 'test/data/yaml-header.md';
 
     var autographResult =
@@ -423,6 +424,38 @@ describe('mdgraphextract', function() {
                     '\t"SH_1_2" -> "SH11";\n' +
                     '}\n';
                 graphextract.extract(text, { mode: 'dotex', group: ['alpha', 'b'] }, function(result) {
+                    assert.equal(result, expected, 'dot output does not equal expectation');
+                    done();
+                });
+            });
+
+            it('dotex mode, doc_multi_dotex_2, group [X]', function(done) {
+                var text = fs.readFileSync(multiDotexExampleFile2, 'utf8');
+                var expected =
+                    'digraph G {\n' +
+                    '\t"A";\n' +
+                    '\t"B" [label=bee];\n' +
+                    '\t"D";\n' +
+                    '\t"E";\n' +
+                    '\t"A" -> "B";\n' +
+                    '}\n';
+                graphextract.extract(text, { mode: 'dotex', group: ['X'] }, function(result) {
+                    assert.equal(result, expected, 'dot output does not equal expectation');
+                    done();
+                });
+            });
+
+            it('dotex mode, doc_multi_dotex_2, group [Y]', function(done) {
+                var text = fs.readFileSync(multiDotexExampleFile2, 'utf8');
+                var expected =
+                    'digraph G {\n' +
+                    '\t"B" [label=bee];\n' +
+                    '\t"C";\n' +
+                    '\t"D";\n' +
+                    '\t"E";\n' +
+                    '\t"B" -> "C";\n' +
+                    '}\n';
+                graphextract.extract(text, { mode: 'dotex', group: ['Y'] }, function(result) {
                     assert.equal(result, expected, 'dot output does not equal expectation');
                     done();
                 });
