@@ -58,7 +58,7 @@ Extracts [DOT] commands from HTML-comments under consideration of the last headl
 Example [Markdown] document:
 
 ~~~ Markdown
-<!-- 
+<!--
 @graph MyGraph: bgcolor=azure
 @graph-attributes rankdir=TB
 @node-attributes fontname=Helvetica
@@ -121,7 +121,7 @@ Commands without a group tag are always selected.
 A [DOT] command is taged by adding a hash character followed by a group name
 without spaces after the command name.
 
-During the extraction, the command group(s) are specified with the option `group`. 
+During the extraction, the command group(s) are specified with the option `group`.
 
 If an edge is selected by the group(s), the two referenced nodes are
 selected too, despite thier group tags.
@@ -143,8 +143,7 @@ The edge to *H1* is taged with group `A`.
 The node of this chapter is taged with group `B`.
 <!-- @n #B -->
 The edge from *H1* to *H3* is taged with group `B`.
-<!-- @e #B H1 -> H3 --> 
-
+<!-- @e #B H1 -> H3 -->
 ~~~
 
 Resulting [DOT] file without a specified group:
@@ -161,7 +160,49 @@ Resulting [DOT] file with group specified as `"A"`:
 digraph G {
     "H1" [URL="#h1"];
     "H2" [URL="#h2"];
-    "H2" -> "H1";    
+    "H2" -> "H1";
+}
+~~~
+
+In the context of one HTML comment, the group tags can be pre-defined
+for all following commands with the command `tags` or `t`, respectively.
+Every command will be treated as it would have its own explicit group tags
+_and_ the pre-defined group tags.
+The pre-defined group tags can be resettet with a `tags` or `t` command
+without any group tags.
+They are automatically resetted if the HTML comment block ends.
+
+Example Markdown document:
+
+~~~ Markdown
+<!--
+@t #A
+@n X
+@n Y
+@e X -> Y
+@t #B
+@n Z
+@e Y -> Z
+-->
+~~~
+
+Resulting [DOT] file with group specified as `"A"`:
+
+~~~ DOT
+digraph G {
+    "X";
+    "Y";
+    "X" -> "Y";
+}
+~~~
+
+Resulting [DOT] file with group specified as `"B"`:
+
+~~~ DOT
+digraph G {
+    "Y";
+    "Z";
+    "Y" -> "Z";
 }
 ~~~
 
