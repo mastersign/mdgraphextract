@@ -31,7 +31,7 @@
   "license": "MIT",
   "dependencies": {
     "lodash": "^4.0.0",
-    "mdheadline": "^0.2.0",
+    "mdheadline": "^0.3.0",
     "split-stream": "^0.2.0",
     "through2": "^2.0.0"
   },
