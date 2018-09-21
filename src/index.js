@@ -182,7 +182,7 @@ var dotex = function (es, opt) {
 	var attributesPattern = /^\s*\w+=(?:(?:\"[^\"]*\")|(?:\S+))/;
 	var namePattern = /^(?:([^:<=]*?)\s*)?(?::\s*(.*)\s*)?$/;
 	var nameTypePattern = /^(?:([^:<=]*?)\s*)?(?:<([^>]+)>\s*)?(?::\s*(.*)\s*)?$/;
-	var edgePattern = /^(?:(.*?)\s*)?->\s*([^:<=]*?)\s*(?:<([^>]+)>\s*)?(?::\s*(.*)\s*)?$/;
+	var edgePattern = /^(?:(.*?)\s*)?(->|<-)\s*([^:<=]*?)\s*(?:<([^>]+)>\s*)?(?::\s*(.*)\s*)?$/;
 
 	var m;
 	var src, cmd, cmdTags, cmdText;
@@ -442,16 +442,26 @@ var dotex = function (es, opt) {
 			// @egde [Node Name] -> Node Name <Type Name>
 			// @edge [Node Name] -> Node Name: key=value1 key2="value 2"
 			// @edge [Node Name] -> Node Name <Type Name>: key=value1 key2="value 2"
+			// @edge <- Node Name
+			// @edge Node Name <- Node Name
+			// @egde [Node Name] <- Node Name <Type Name>
+			// @edge [Node Name] <- Node Name: key=value1 key2="value 2"
+			// @edge [Node Name] <- Node Name <Type Name>: key=value1 key2="value 2"
 			m = edgePattern.exec(cmdText);
 			if (m) {
 				if (!m[1] && !lastHeadline) {
 					console.error('No source node name given in:\n\t' + src);
 					return;
 				}
-				nodeName = m[1] || lastHeadline.text;
-				nodeName2 = m[2];
-				typeAttributes = edgeTypes[m[3]];
-				attributes = parseAttributes(m[4]);
+				if (m[2] == '->') {
+					nodeName = m[1] || lastHeadline.text;
+					nodeName2 = m[3];
+				} else {
+					nodeName2 = m[1] || lastHeadline.text;
+					nodeName = m[3];
+				}
+				typeAttributes = edgeTypes[m[4]];
+				attributes = parseAttributes(m[5]);
 				attributesString = formatAttributes(
 					typeAttributes, attributes);
 				storeEdge(nodeName, nodeName2, attributesString);
