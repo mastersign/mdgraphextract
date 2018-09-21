@@ -1,6 +1,6 @@
 {
   "name": "mdgraphextract",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "extracting graph information from a markdown file",
   "readme": "README.md",
   "repository": "mastersign/mdgraphextract",
