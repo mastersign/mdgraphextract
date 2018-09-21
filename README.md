@@ -318,4 +318,4 @@ _MdGraphExtract_ is published under the MIT license.
 [Gulp]: http://gulpjs.com
 [Markdown]: https://daringfireball.net/projects/markdown/
 [GraphViz]: http://www.graphviz.org
-[DOT]: http://www.graphviz.org/content/dot-language
+[DOT]: https://graphviz.gitlab.io/_pages/doc/info/lang.html
