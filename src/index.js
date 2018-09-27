@@ -130,8 +130,11 @@ var parseAttributes = function (text) {
 	return result;
 };
 
+var htmlLabelTags = /<(BR|FONT|IMG|TABLE|TD)(\s+[^>]*)?>|<(I|B|U|O|SUB|SUP|S|HR|VR|TR)\s*>/;
+
 var formatAttribute = function (key, value) {
-	if (value.length > 2 && value[0] === '<' && value[value.length - 1] === '>') {
+
+	if (value.match(htmlLabelTags)) {
 		return key + '=<' + value + '>';
 	}
 	if (/\W/.test(value)) {

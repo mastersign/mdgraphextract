@@ -10,7 +10,7 @@
 
 # H1
 <!-- @node -->
-<!-- @edge H1 -> SH12: color=#FF0000 -->
+<!-- @edge H1 -> SH12: color=#FF0000 label="<B>H1</B>" -->
 <!-- @e <- SH11 -->
 
 ```html
@@ -22,7 +22,7 @@
 ```
 
 ## SH11
-<!-- @n color=#FFFF00 -->
+<!-- @n color=#FFFF00, label=SH<BR>1.1 -->
 
 ## SH12 {#sh-1-2}
 <!-- @n <nt1> -->

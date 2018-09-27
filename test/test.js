@@ -335,9 +335,9 @@ describe('mdgraphextract', function() {
                     '\tnode [color="#00FF00" fillcolor="#0000FF" style=filled];\n' +
                     '\tedge [color="#000000"];\n' +
                     '\t"H1" [URL="#h1"];\n' +
-                    '\t"SH11" [color="#FFFF00" URL="#sh11"];\n' +
+                    '\t"SH11" [color="#FFFF00" label=<SH<BR>1.1> URL="#sh11"];\n' +
                     '\t"SH12" [color="#FF0000" URL="#sh-1-2"];\n' +
-                    '\t"H1" -> "SH12" [color="#FF0000"];\n' +
+                    '\t"H1" -> "SH12" [color="#FF0000" label=<<B>H1</B>>];\n' +
                     '\t"SH11" -> "H1";\n' +
                     '\t"SH12" -> "SH11" [color="#00FFFF"];\n' +
                     '\t"SH11" -> "SH12" [color="#00FFFF" style=dashed];\n' +
