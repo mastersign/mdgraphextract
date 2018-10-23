@@ -219,6 +219,27 @@ describe('mdgraphextract', function() {
                 });
             });
 
+            it('autograph mode, with multi-edge grouping', function (done) {
+                var text = fs.readFileSync(autographExampleFile, 'utf8');
+                var expected =
+                    'digraph G {\n' +
+                    '\t"hädline" [label="1 Hädline"];\n' +
+                    '\t"h2" [label="2 Headline"];\n' +
+                    '\t"subßection-a" [label="Subßection A"];\n' +
+                    '\t"subsection-b" [label="Subsection B"];\n' +
+                    '\t"hädline" -> "subßection-a";\n' +
+                    '\t"hädline" -> "subsection-b";\n' +
+                    '\t"subßection-a" -> "h2" [weight=2];\n' +
+                    '\t"subsection-b" -> "hädline";\n' +
+                    '\t"subsection-b" -> "subßection-a";\n' +
+                    '}\n';
+                graphextract.extract(text, { noAutoRefs: true, groupMultiEdges: true }, function(result) {
+                    assert.equal(result, expected, 'dot output does not equal expectation');
+                    done();
+                });
+            });
+
+
             it('autograph mode with YAML header', function (done) {
                var text = fs.readFileSync(yamlHeaderExampleFile, 'utf8');
                var expected = yamlHeaderResult;

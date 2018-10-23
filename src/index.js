@@ -23,6 +23,7 @@ var autograph = function (es, opt) {
 	var noAutoRefs = !!opt.noAutoRefs;
 	var isolated = !!opt.autographIsolatedNodes;
 	var implicit = !!opt.autographImplicitNodes;
+	var groupMultiEdges = !!opt.groupMultiEdges;
 
 	var references = [];
 	var nodes = [];
@@ -93,7 +94,7 @@ var autograph = function (es, opt) {
 			function (e) {
 				var target = _.find(
 					nodes,
-					function (n) { return mdheadline.anchor(n.text) === mdheadline.anchor(e.tmpTo) });
+					function (n) { return mdheadline.anchor(n.text) === mdheadline.anchor(e.tmpTo); });
 				if (target) {
 					e.to = target.id;
 				} else {
@@ -103,9 +104,23 @@ var autograph = function (es, opt) {
 			});
 		edges = _.filter(edges, 'to');
 
+		// translate edge duplicates into weight
+		if (groupMultiEdges) {
+			var edgeGroups = _.groupBy(edges, function (e) { return e.from + ' -> ' + e.to; });
+			edges = _.map(_.keys(edgeGroups), function (k) {
+				var e = edgeGroups[k][0];
+				e.weight = _.size(edgeGroups[k]);
+				return e;
+			});
+		}
+
 		// build dot notation for edges
 		_.forEach(edges, function (e) {
+			if (_.isNumber(e.weight) && e.weight !== 1) {
+				e.dot = '\t"' + e.from + '" -> "' + e.to + '" [weight=' + e.weight + '];\n';
+			} else {
 				e.dot = '\t"' + e.from + '" -> "' + e.to + '";\n';
+			}
 		});
 
 		var definedNodeIds = _(nodes)
