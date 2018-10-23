@@ -15,6 +15,6 @@ Test <!-- And not in this [Headline] comment --> text. ![Image](image.jpg)
 --> But after this comment [very last 1][Headline].
 <!--
 comment --> and between [very last 2][Headline] <!-- more
-comment -->
+comment --> No [external](#headline) in the text.
 
 ![](image2.jpg)

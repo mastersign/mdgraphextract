@@ -32,7 +32,7 @@ var MdParser = function (input, encoding) {
 	var headline1Pattern = /^==+\s*$/;
 	var headline2Pattern = /^--+\s*$/;
 
-	var internalLinkPattern = /(?:^|[^\]\)!])\[([^\]]+)\](?: ?\[([^\]]*)\])?/g;
+	var internalLinkPattern = /(?:^|[^\]\)!])\[([^\]]+)\](?: ?\[([^\]]*)\])?(?!\()/g;
 
 	var externalLinkPattern = /(?:^|[^\]!])\[([^\]]+)\]\(([^\)]+)\)/g;
 	var urlLinkPattern = /<([^>\s]+)>/g;
