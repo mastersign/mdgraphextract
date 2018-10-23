@@ -15,10 +15,10 @@ describe('MdParser', function () {
 
 	it('headlines', function(done) {
 		var expected = [
-			{ source: "Main Headline", 
-			text: "Main Headline", 
+			{ source: "Main Headline",
+			text: "Main Headline",
 			anchor: "main-headline",
-			level: 1, 
+			level: 1,
 			row: 8, column: 1 },
 			{ source: "Subsection",
 			text: "Subsection",
@@ -47,7 +47,7 @@ describe('MdParser', function () {
 			{ source: "the last headline",
 			text: "the last headline",
 			anchor: "the-last-headline",
-			level: 4, 
+			level: 4,
 			row: 33, column: 1 },
 			{ source: "Subsection",
 			text: "Subsection",
@@ -60,7 +60,7 @@ describe('MdParser', function () {
 			level: 2,
 			row: 37, column: 1 }
 		];
-	
+
 		var p = new MdParser(fs.createReadStream('test/data/headlines.md'));
 		var result = [];
 		p.on('headline', function(hl) { result.push(hl); });
@@ -70,7 +70,7 @@ describe('MdParser', function () {
 		});
 		p.resume();
 	});
-	
+
 	it ('headlines with YAML header', function (done) {
 		var expected = [
 			{ source: 'Headline 1',
@@ -93,7 +93,7 @@ describe('MdParser', function () {
 		});
 		p.resume();
 	});
-	
+
 	it('internal links', function(done) {
 		var expected = [
 			{ target: 'Headline', targetText: 'Headline', text: 'First Headline', row: 3, column: 1 },
@@ -106,7 +106,7 @@ describe('MdParser', function () {
 			{ target: 'Headline', targetText: 'Headline', text: 'very last 1', row: 15, column: 28 },
 			{ target: 'Headline', targetText: 'Headline', text: 'very last 2', row: 17, column: 25 }
 		];
-	
+
 		var p = new MdParser(fs.createReadStream('test/data/internal-links.md'));
 		var result = [];
 		p.on('internal-link', function(hl) { result.push(hl); });
@@ -116,10 +116,10 @@ describe('MdParser', function () {
 		});
 		p.resume();
 	});
-	
+
 	it('links', function(done) {
 		var expected = [
-			{ text: 'http://www.theendoftheinternet.com/', 
+			{ text: 'http://www.theendoftheinternet.com/',
 			url: 'http://www.theendoftheinternet.com/',
 			row: 1, column: 12 },
 			{ text: 'mailto:link@xyz.com', url: 'mailto:link@xyz.com',
@@ -131,7 +131,7 @@ describe('MdParser', function () {
 			{ text: 'link', url: 'link.txt', row: 18, column: 13 },
 			{ text: 'file://link2.txt', url: 'file://link2.txt', row: 18, column: 31 }
 		];
-	
+
 		var p = new MdParser(fs.createReadStream('test/data/links.md'));
 		var result = [];
 		p.on('link', function(hl) { result.push(hl); });
@@ -141,7 +141,7 @@ describe('MdParser', function () {
 		});
 		p.resume();
 	});
-	
+
 	it('code', function(done) {
 		var expected = [
 			{ typ: 'start', row: 9, column: 1 },
@@ -170,7 +170,7 @@ describe('MdParser', function () {
 			{ text: 'function() { /* fenced code with attributes */ }', row: 34, column: 1 },
 			{ typ: 'end', row: 34, column: 49 }
 		];
-	
+
 		var p = new MdParser(fs.createReadStream('test/data/code.md'));
 		var result = [];
 		p.on('code', function(hl) { result.push(hl); });
@@ -182,7 +182,7 @@ describe('MdParser', function () {
 		});
 		p.resume();
 	});
-	
+
 	it('comments', function(done) {
 		var expected = [
 			{ text: ' a comment', inline: true, row: 2, column: 22 },
@@ -208,7 +208,7 @@ describe('MdParser', function () {
 			{ text: 'multiline ', inline: false, row: 23, column: 1 },
 			{ typ: 'end', row: 23, column: 14 }
 		];
-	
+
 		var p = new MdParser(fs.createReadStream('test/data/comments.md'));
 		var result = [];
 		p.on('comment', function(hl) { result.push(hl); });
@@ -234,7 +234,7 @@ describe('MdParser', function () {
 			{ text: 'This is triple quoted', level: 3, row: 24, column: 1 },
 			{ text: 'with two lines in the paragraph.', level: 3, row: 25, column: 1 }
 		];
-	
+
 		var p = new MdParser(fs.createReadStream('test/data/citations.md'));
 		var result = [];
 		p.on('citation', function(cite) { result.push(cite); });
@@ -269,5 +269,5 @@ describe('MdParser', function () {
 		});
 		p.resume();
 	});
-	
+
 });
