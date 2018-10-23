@@ -19,23 +19,24 @@ describe('mdgraphextract', function() {
 
     var autographResult =
         'digraph G {\n' +
-        '\t"1 Hädline";\n' +
-        '\t"2 Headline";\n' +
-        '\t"Subßection A";\n' +
-        '\t"Subsection B";\n' +
-        '\t"1 Hädline" -> "Subßection A";\n' +
-        '\t"1 Hädline" -> "Subsection B";\n' +
-        '\t"Subßection A" -> "2 Headline";\n' +
-        '\t"Subsection B" -> "1 Hädline";\n' +
-        '\t"Subsection B" -> "Subßection A";\n' +
+        '\t"hädline" [label="1 Hädline"];\n' +
+        '\t"h2" [label="2 Headline"];\n' +
+        '\t"subßection-a" [label="Subßection A"];\n' +
+        '\t"subsection-b" [label="Subsection B"];\n' +
+        '\t"hädline" -> "subßection-a";\n' +
+        '\t"hädline" -> "subsection-b";\n' +
+        '\t"subßection-a" -> "h2";\n' +
+        '\t"subßection-a" -> "h2";\n' +
+        '\t"subsection-b" -> "hädline";\n' +
+        '\t"subsection-b" -> "subßection-a";\n' +
         '}\n';
 
     var yamlHeaderResult =
         'digraph G {\n' +
-        '\t"Headline 1";\n' +
-        '\t"Headline 2";\n' +
-        '\t"Headline 1" -> "Headline 2";\n' +
-        '\t"Headline 2" -> "Headline 1";\n' +
+        '\t"headline-1" [label="Headline 1"];\n' +
+        '\t"headline-2" [label="Headline 2"];\n' +
+        '\t"headline-1" -> "headline-2";\n' +
+        '\t"headline-2" -> "headline-1";\n' +
         '}\n';
 
     describe('ExtractingStream', function () {
@@ -101,15 +102,16 @@ describe('mdgraphextract', function() {
                 var text = fs.readFileSync(autographExampleFile, 'utf8');
                 var expected =
                     'digraph G {\n' +
-                    '\t"1 Hädline" [URL="#hädline"];\n' +
-                    '\t"2 Headline" [URL="#headline"];\n' +
-                    '\t"Subßection A" [URL="#subßection-a"];\n' +
-                    '\t"Subsection B" [URL="#subsection-b"];\n' +
-                    '\t"1 Hädline" -> "Subßection A";\n' +
-                    '\t"1 Hädline" -> "Subsection B";\n' +
-                    '\t"Subßection A" -> "2 Headline";\n' +
-                    '\t"Subsection B" -> "1 Hädline";\n' +
-                    '\t"Subsection B" -> "Subßection A";\n' +
+                    '\t"hädline" [label="1 Hädline", URL="#hädline"];\n' +
+                    '\t"h2" [label="2 Headline", URL="#h2"];\n' +
+                    '\t"subßection-a" [label="Subßection A", URL="#subßection-a"];\n' +
+                    '\t"subsection-b" [label="Subsection B", URL="#subsection-b"];\n' +
+                    '\t"hädline" -> "subßection-a";\n' +
+                    '\t"hädline" -> "subsection-b";\n' +
+                    '\t"subßection-a" -> "h2";\n' +
+                    '\t"subßection-a" -> "h2";\n' +
+                    '\t"subsection-b" -> "hädline";\n' +
+                    '\t"subsection-b" -> "subßection-a";\n' +
                     '}\n';
                 graphextract.extract(text, { }, function(result) {
                     assert.equal(result, expected, 'dot output does not equal expectation');
@@ -121,15 +123,16 @@ describe('mdgraphextract', function() {
                 var text = fs.readFileSync(autographExampleFile, 'utf8');
                 var expected =
                     'digraph G {\n' +
-                    '\t"1 Hädline" [URL="target.html#hädline"];\n' +
-                    '\t"2 Headline" [URL="target.html#headline"];\n' +
-                    '\t"Subßection A" [URL="target.html#subßection-a"];\n' +
-                    '\t"Subsection B" [URL="target.html#subsection-b"];\n' +
-                    '\t"1 Hädline" -> "Subßection A";\n' +
-                    '\t"1 Hädline" -> "Subsection B";\n' +
-                    '\t"Subßection A" -> "2 Headline";\n' +
-                    '\t"Subsection B" -> "1 Hädline";\n' +
-                    '\t"Subsection B" -> "Subßection A";\n' +
+                    '\t"hädline" [label="1 Hädline", URL="target.html#hädline"];\n' +
+                    '\t"h2" [label="2 Headline", URL="target.html#h2"];\n' +
+                    '\t"subßection-a" [label="Subßection A", URL="target.html#subßection-a"];\n' +
+                    '\t"subsection-b" [label="Subsection B", URL="target.html#subsection-b"];\n' +
+                    '\t"hädline" -> "subßection-a";\n' +
+                    '\t"hädline" -> "subsection-b";\n' +
+                    '\t"subßection-a" -> "h2";\n' +
+                    '\t"subßection-a" -> "h2";\n' +
+                    '\t"subsection-b" -> "hädline";\n' +
+                    '\t"subsection-b" -> "subßection-a";\n' +
                     '}\n';
                 graphextract.extract(text, { refPrefix: 'target.html' }, function(result) {
                     assert.equal(result, expected, 'dot output does not equal expectation');
@@ -141,16 +144,17 @@ describe('mdgraphextract', function() {
                 var text = fs.readFileSync(autographExampleFile, 'utf8');
                 var expected =
                     'digraph G {\n' +
-                    '\t"1 Hädline";\n' +
-                    '\t"2 Headline";\n' +
-                    '\t"Subßection A";\n' +
-                    '\t"Subsection B";\n' +
-                    '\t"3 Isolated";\n' +
-                    '\t"1 Hädline" -> "Subßection A";\n' +
-                    '\t"1 Hädline" -> "Subsection B";\n' +
-                    '\t"Subßection A" -> "2 Headline";\n' +
-                    '\t"Subsection B" -> "1 Hädline";\n' +
-                    '\t"Subsection B" -> "Subßection A";\n' +
+                    '\t"hädline" [label="1 Hädline"];\n' +
+                    '\t"h2" [label="2 Headline"];\n' +
+                    '\t"subßection-a" [label="Subßection A"];\n' +
+                    '\t"subsection-b" [label="Subsection B"];\n' +
+                    '\t"isolated" [label="3 Isolated"];\n' +
+                    '\t"hädline" -> "subßection-a";\n' +
+                    '\t"hädline" -> "subsection-b";\n' +
+                    '\t"subßection-a" -> "h2";\n' +
+                    '\t"subßection-a" -> "h2";\n' +
+                    '\t"subsection-b" -> "hädline";\n' +
+                    '\t"subsection-b" -> "subßection-a";\n' +
                     '}\n';
                 graphextract.extract(text, { noAutoRefs: true, autographIsolatedNodes: true }, function(result) {
                     assert.equal(result, expected, 'dot output does not equal expectation');
@@ -162,16 +166,17 @@ describe('mdgraphextract', function() {
                 var text = fs.readFileSync(autographExampleFile, 'utf8');
                 var expected =
                     'digraph G {\n' +
-                    '\t"1 Hädline";\n' +
-                    '\t"2 Headline";\n' +
-                    '\t"Subßection A";\n' +
-                    '\t"Subsection B";\n' +
-                    '\t"1 Hädline" -> "Subßection A";\n' +
-                    '\t"1 Hädline" -> "Subsection B";\n' +
-                    '\t"Subßection A" -> "2 Headline";\n' +
-                    '\t"Subsection B" -> "1 Hädline";\n' +
-                    '\t"Subsection B" -> "Subßection A";\n' +
-                    '\t"Subsection B" -> "nowhere";\n' +
+                    '\t"hädline" [label="1 Hädline"];\n' +
+                    '\t"h2" [label="2 Headline"];\n' +
+                    '\t"subßection-a" [label="Subßection A"];\n' +
+                    '\t"subsection-b" [label="Subsection B"];\n' +
+                    '\t"hädline" -> "subßection-a";\n' +
+                    '\t"hädline" -> "subsection-b";\n' +
+                    '\t"subßection-a" -> "h2";\n' +
+                    '\t"subßection-a" -> "h2";\n' +
+                    '\t"subsection-b" -> "hädline";\n' +
+                    '\t"subsection-b" -> "subßection-a";\n' +
+                    '\t"subsection-b" -> "nowhere";\n' +
                     '}\n';
                 graphextract.extract(text, { noAutoRefs: true, autographImplicitNodes: true }, function(result) {
                     assert.equal(result, expected, 'dot output does not equal expectation');
@@ -183,15 +188,16 @@ describe('mdgraphextract', function() {
                 var text = fs.readFileSync(autographExampleFile, 'utf8');
                 var expected =
                     'digraph G {\n' +
-                    '\t"1 Hädline";\n' +
-                    '\t"2 Headline";\n' +
-                    '\t"Subßection A";\n' +
-                    '\t"Subsection B";\n' +
-                    '\t"1 Hädline" -> "Subßection A";\n' +
-                    '\t"1 Hädline" -> "Subsection B";\n' +
-                    '\t"Subßection A" -> "2 Headline";\n' +
-                    '\t"Subsection B" -> "1 Hädline";\n' +
-                    '\t"Subsection B" -> "Subßection A";\n' +
+                    '\t"hädline" [label="1 Hädline"];\n' +
+                    '\t"h2" [label="2 Headline"];\n' +
+                    '\t"subßection-a" [label="Subßection A"];\n' +
+                    '\t"subsection-b" [label="Subsection B"];\n' +
+                    '\t"hädline" -> "subßection-a";\n' +
+                    '\t"hädline" -> "subsection-b";\n' +
+                    '\t"subßection-a" -> "h2";\n' +
+                    '\t"subßection-a" -> "h2";\n' +
+                    '\t"subsection-b" -> "hädline";\n' +
+                    '\t"subsection-b" -> "subßection-a";\n' +
                     '}\n';
                 graphextract.extract(text, { noAutoRefs: true, autographLevel: 2 }, function(result) {
                     assert.equal(result, expected, 'dot output does not equal expectation');
@@ -203,9 +209,9 @@ describe('mdgraphextract', function() {
                 var text = fs.readFileSync(autographExampleFile, 'utf8');
                 var expected =
                     'digraph G {\n' +
-                    '\t"Subßection A";\n' +
-                    '\t"Subsection B";\n' +
-                    '\t"Subsection B" -> "Subßection A";\n' +
+                    '\t"subßection-a" [label="Subßection A"];\n' +
+                    '\t"subsection-b" [label="Subsection B"];\n' +
+                    '\t"subsection-b" -> "subßection-a";\n' +
                     '}\n';
                 graphextract.extract(text, { noAutoRefs: true, autographLevel: 2, autographLevelStrict: true }, function(result) {
                     assert.equal(result, expected, 'dot output does not equal expectation');

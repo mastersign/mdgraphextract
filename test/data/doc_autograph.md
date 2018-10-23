@@ -16,7 +16,7 @@ Here comes `code`:
 
 <!--Comment 1-->
 
-# 2 Headline
+# 2 Headline {#h2}
 
 ## Subßection **A**
 <!--
@@ -24,17 +24,19 @@ Comment A.1
 Comment A.2
 -->
 
-[2 Headline]
+[2 Headline][]
 
 * List 1
 * List 2
+
+[Headline 2](#h2)
 
 ## Subsection **B**
 
 [_1_ Hädline], [Subßection **A**]
 **End** of the *example* text.
 
-And a link to [nowhere].
+And a link to [nowhere][].
 
 [ExtLink]: http://localhost/ "The Label of the link"
 [Unused]: http://unused.com

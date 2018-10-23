@@ -4,6 +4,7 @@ var Readable = require('stream').Readable;
 var util = require('util');
 var path = require('path');
 var _ = require('lodash');
+var mdheadline = require('mdheadline');
 
 var MdParser = require('./mdparser');
 
@@ -36,19 +37,17 @@ var autograph = function (es, opt) {
 				return;
 			}
 		}
-		node = e.text;
-		label = null;
+		node = e.anchor;
+		label = '"' + e.text + '"';
 		var attributes = [];
 		if (opt.levelFormat) {
 			if (e.level === 1) {
-				label = '<B>' + node + '</B>';
+				label = '<<B>' + e.text + '</B>>';
 			} else if (e.level === 2) {
-				label = '<I>' + node + '</I>';
-			}
-			if (label) {
-				attributes.push('label=<' + label + '>');
+				label = '<<I>' + e.text + '</I>>';
 			}
 		}
+		attributes.push('label=' + label + '');
 		if (!noAutoRefs) {
 			var urlAttribute = 'URL="';
 			if (refPrefix) {
@@ -62,7 +61,9 @@ var autograph = function (es, opt) {
 			attributeStr = ' [' + attributes.join(', ') + ']';
 		}
 		nodes.push({
-			label: node,
+			id: node,
+			text: e.text,
+			label: label,
 			skip: skip,
 			dot: '\t"' + node + '"' + attributeStr + ';\n'
 		 });
@@ -71,8 +72,15 @@ var autograph = function (es, opt) {
 		if (node) {
 			edges.push({
 				from: node,
-				to: e.targetText,
-				dot: '\t"' + node + '" -> "' + e.targetText + '";\n'
+				tmpTo: e.target
+			});
+		}
+	});
+	es._parser.on('link', function (e) {
+		if (node && _.startsWith(e.url, '#')) {
+			edges.push({
+				from: node,
+				to: e.url.substring(1),
 			});
 		}
 	});
@@ -80,12 +88,32 @@ var autograph = function (es, opt) {
 		references.push(e.label);
 	});
 	es._parser.on('end', function () {
-		var definedNodeLabels = _(nodes)
-			.map(function (n) { return n.label; })
+		// resolve temporary edge targets
+		_.forEach(_.filter(edges, 'tmpTo'),
+			function (e) {
+				var target = _.find(
+					nodes,
+					function (n) { return mdheadline.anchor(n.text) === mdheadline.anchor(e.tmpTo) });
+				if (target) {
+					e.to = target.id;
+				} else {
+					e.to = e.tmpTo;
+				}
+				delete e.tmpTo;
+			});
+		edges = _.filter(edges, 'to');
+
+		// build dot notation for edges
+		_.forEach(edges, function (e) {
+				e.dot = '\t"' + e.from + '" -> "' + e.to + '";\n';
+		});
+
+		var definedNodeIds = _(nodes)
+			.map(function (n) { return n.id; })
 			.value();
-		var levelNodeLabels = _(nodes)
+		var levelNodeIds = _(nodes)
 			.filter(function (n) { return !n.skip; })
-			.map(function (n) { return n.label; })
+			.map(function (n) { return n.id; })
 			.value();
 		var selectedEdges = _(edges)
 			.filter(function (e) {
@@ -93,18 +121,19 @@ var autograph = function (es, opt) {
 			})
 			.filter(function (e) {
 				return implicit ||
-					!strictLevel && includes(definedNodeLabels, e.to) ||
-					includes(levelNodeLabels, e.from) && includes(levelNodeLabels, e.to);
+					!strictLevel && includes(definedNodeIds, e.to) ||
+					includes(levelNodeIds, e.from) && includes(levelNodeIds, e.to);
 			})
 			.value();
-		var usedNodeLabels = _(selectedEdges)
+		// console.log(edges);
+		var usedNodeIds = _(selectedEdges)
 				.map(function (e) { return e.from; })
 				.concat(_.map(selectedEdges, function (e) { return e.to; }))
 				.uniq()
 				.value();
 		var selectedNodes = _.filter(nodes, function (n) {
-				return includes(usedNodeLabels, n.label) ||
-					isolated && includes(levelNodeLabels, n.label);
+				return includes(usedNodeIds, n.id) ||
+					isolated && includes(levelNodeIds, n.id);
 			});
 		es.push('digraph G {\n');
 		_.forEach(selectedNodes, function (n) {
