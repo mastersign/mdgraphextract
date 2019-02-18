@@ -57,7 +57,7 @@ describe('lines', function () {
 	});
 
 	it('from buffer (flow)', function(done) {
-		var buffer = new Buffer('Hallo Welt\r\n Was geht? \n\nUnd tschüß.\n', 'utf8');
+		var buffer = Buffer.from('Hallo Welt\r\n Was geht? \n\nUnd tschüß.\n', 'utf8');
 		var expects = ['Hallo Welt', ' Was geht? ', '', 'Und tschüß.', ''];
 
 		var result = [];
@@ -72,7 +72,7 @@ describe('lines', function () {
 	});
 
 	it('from buffer (non-flow)', function(done) {
-		var buffer = new Buffer('Hallo Welt\r\n Was geht? \n\nUnd tschüß.\n', 'utf8');
+		var buffer = Buffer.from('Hallo Welt\r\n Was geht? \n\nUnd tschüß.\n', 'utf8');
 		var expects = ['Hallo Welt', ' Was geht? ', '', 'Und tschüß.', ''];
 
 		var result = [];

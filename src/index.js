@@ -575,7 +575,7 @@ var extract = function (data) {
 		if (typeof(data) === 'string') {
 			cb(chunks.join(''));
 		} else if (data instanceof Buffer) {
-			cb(new Buffer(chunks.join(''), opt.encoding));
+			cb(Buffer.from(chunks.join(''), opt.encoding));
 		} else {
 			cb(null);
 		}
