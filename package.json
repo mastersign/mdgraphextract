@@ -30,15 +30,15 @@
   "homepage": "https://github.com/mastersign/mdgraphextract#readme",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "mdheadline": "^0.3.1",
     "split-stream": "^0.2.0",
-    "through2": "^3.0.0"
+    "through2": "^4.0.2"
   },
   "devDependencies": {
-    "glob": "^7.0.0",
-    "mocha": "^5.2.0",
+    "glob": "^7.1.7",
+    "mocha": "^8.4.0",
     "streamifier": "^0.1.0",
-    "vinyl": "^2.0.0"
+    "vinyl": "^2.2.1"
   }
 }
