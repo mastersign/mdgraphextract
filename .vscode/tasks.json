@@ -1,17 +1,24 @@
 {
-    "version": "0.1.0",
+    "version": "2.0.0",
     "command": "mocha",
-    "isShellCommand": true,
     "args": [
         "--no-color"
     ],
     "tasks": [
         {
-            "taskName": "test",
-            "isTestCommand": true,
+            "label": "test",
+            "type": "shell",
+            "command": "mocha",
             "args": [
+                "--no-color",
+                "test",
                 "test"
-            ]
+            ],
+            "problemMatcher": [],
+            "group": {
+                "_id": "test",
+                "isDefault": false
+            }
         }
     ]
 }
