@@ -36,8 +36,8 @@
     "through2": "^4.0.2"
   },
   "devDependencies": {
-    "glob": "^7.1.7",
-    "mocha": "^8.4.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.1.0",
     "streamifier": "^0.1.0",
     "vinyl": "^2.2.1"
   }
